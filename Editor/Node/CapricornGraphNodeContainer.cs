@@ -3,6 +3,8 @@ using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditorInternal;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace Dunward
 {
@@ -10,6 +12,8 @@ namespace Dunward
     {
         private Node parent;
         private VisualElement mainContainer;
+
+        private bool foldout = false;
 
         public CapricornGraphNodeContainer(Node node)
         {
@@ -23,10 +27,17 @@ namespace Dunward
 
             coroutineContainer.AddToClassList("capricorn-coroutine-container");
             actionContainer.AddToClassList("capricorn-action-container");
-            var test = new string[] { "Test1", "Test2", "Test3" };
+            var test = new List<string>{ "Test1", "Test2", "Test3" };
             var list = new ReorderableList(test, typeof(string), true, false, true, true);
-
-            coroutineContainer.Add(new IMGUIContainer(list.DoLayoutList));
+            coroutineContainer.Add(new IMGUIContainer(() =>
+            {
+                foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
+                if (foldout)
+                {
+                    list.DoLayoutList();
+                }
+                EditorGUILayout.EndFoldoutHeaderGroup();
+            }));
 
             var enumField = new EnumField(ActionNodeType.NONE);
             actionContainer.Add(enumField);
