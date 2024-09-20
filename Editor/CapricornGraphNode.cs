@@ -10,21 +10,14 @@ namespace Dunward
         private EnumField enumField;
         public string guid;
 
-        public CapricornGraphNode(float x, float y)
+        public CapricornGraphNode(int id, float x, float y)
         {
             mainContainer.Insert(1, extensionContainer);
-            title = "Node";
+            title = $"{id}";
             SetPosition(new Rect(x, y, 0, 0));
-            Debug.LogError($"Position: {x}, {y}");
 
-            // Middle
-            var textField = new TextField();
-            textField.value = "TEST VALUE";
-            extensionContainer.Add(textField);
-
-            // Bottom
-            enumField = new EnumField(ActionNodeType.NONE);
-            extensionContainer.Add(enumField);
+            var container = new CapricornGraphNodeContainer(this);
+            extensionContainer.Add(container.Build());
 
             var input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
             var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
@@ -37,7 +30,7 @@ namespace Dunward
             RefreshExpandedState();
         }
 
-        public CapricornGraphNode(Vector2 mousePosition) : this(mousePosition.x, mousePosition.y)
+        public CapricornGraphNode(int id, Vector2 mousePosition) : this(id, mousePosition.x, mousePosition.y)
         {
 
         }
