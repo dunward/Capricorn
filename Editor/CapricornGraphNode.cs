@@ -16,18 +16,7 @@ namespace Dunward
             title = $"{id}";
             SetPosition(new Rect(x, y, 0, 0));
 
-            var container = new CapricornGraphNodeContainer(this);
-            extensionContainer.Add(container.Build());
-
-            var input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
-            var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
-            input.portName = string.Empty;
-            output.portName = string.Empty;
-            input.portColor = new Color(0.69f, 0.98f, 0.34f);
-            output.portColor = new Color(0.69f, 0.98f, 0.34f);
-
-            inputContainer.Add(input);
-            outputContainer.Add(output);
+            new CapricornGraphNodeMainContainer(this);
 
             RefreshExpandedState();
         }

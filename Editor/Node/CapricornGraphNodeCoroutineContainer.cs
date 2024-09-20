@@ -8,25 +8,12 @@ using UnityEngine;
 
 namespace Dunward
 {
-    public class CapricornGraphNodeContainer
+    public class CapricornGraphNodeCoroutineContainer
     {
-        private Node parent;
-        private VisualElement mainContainer;
-
         private bool foldout = false;
 
-        public CapricornGraphNodeContainer(Node node)
+        public CapricornGraphNodeCoroutineContainer(CapricornGraphNodeMainContainer main)
         {
-            parent = node;
-
-            mainContainer = new VisualElement();
-            mainContainer.AddToClassList("capricorn-main-container");
-
-            var coroutineContainer = new VisualElement();
-            var actionContainer = new VisualElement();
-
-            coroutineContainer.AddToClassList("capricorn-coroutine-container");
-            actionContainer.AddToClassList("capricorn-action-container");
             
             var test = new List<CapricornGraphCoroutineElement>();
             var list = new ReorderableList(test, typeof(string), true, false, true, true);
@@ -48,7 +35,7 @@ namespace Dunward
                 test.Add(new CapricornGraphTest());
             };
             
-            coroutineContainer.Add(new IMGUIContainer(() =>
+            main.coroutineContainer.Add(new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
                 if (foldout)
@@ -57,18 +44,6 @@ namespace Dunward
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }));
-
-
-            var enumField = new EnumField(ActionNodeType.NONE);
-            actionContainer.Add(enumField);
-
-            mainContainer.Add(coroutineContainer);
-            mainContainer.Add(actionContainer);
-        }
-
-        public VisualElement Build()
-        {
-            return mainContainer;
         }
     }
 }
