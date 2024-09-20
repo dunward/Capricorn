@@ -48,9 +48,12 @@ namespace Dunward
 
         private void AddGraphView()
         {
+            var content = new VisualElement();
             var graphView = new CapricornGraphView();
-            graphView.styleSheets.Add(graphStyle);
-            rootVisualElement.Add(graphView);
+            content.styleSheets.Add(graphStyle);
+            content.name = "content";
+            content.Add(graphView);
+            rootVisualElement.Add(content);
         }
     }
 }
