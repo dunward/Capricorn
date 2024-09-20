@@ -26,7 +26,7 @@ namespace Dunward
             enumField = new EnumField(ActionNodeType.NONE);
             extensionContainer.Add(enumField);
 
-            var input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
+            var input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
             var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
             input.portName = string.Empty;
             output.portName = string.Empty;
