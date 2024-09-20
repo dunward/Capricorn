@@ -23,6 +23,8 @@ namespace Dunward
             var output = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
             input.portName = string.Empty;
             output.portName = string.Empty;
+            input.portColor = new Color(0.69f, 0.98f, 0.34f);
+            output.portColor = new Color(0.69f, 0.98f, 0.34f);
 
             inputContainer.Add(input);
             outputContainer.Add(output);

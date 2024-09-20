@@ -11,3 +11,7 @@
     flex-shrink: 1;
     background-color: #202020;
 }
+
+.graphElement {
+    min-width: 200px;
+}
