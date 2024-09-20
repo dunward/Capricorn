@@ -10,7 +10,7 @@ namespace Dunward
 {
     public class CapricornGraphNodeCoroutineContainer
     {
-        private bool foldout = false;
+        private bool foldout = true;
 
         public CapricornGraphNodeCoroutineContainer(CapricornGraphNodeMainContainer main)
         {

@@ -12,7 +12,11 @@ namespace Dunward
 
         public CapricornGraphView()
         {
-            var node = new CapricornGraphNode(this, lastNodeID, new Vector2(100, 200));
+            //Get Current Graph view center coordinate
+            
+
+
+            var node = new CapricornGraphNode(this, -1, new Vector2(100, 200));
             AddElement(node);
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());

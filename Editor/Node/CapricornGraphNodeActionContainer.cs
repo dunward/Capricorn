@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
@@ -10,7 +12,11 @@ namespace Dunward
     {
         private CapricornGraphNodeMainContainer main;
 
-        private ActionNodeType actionNodeType = ActionNodeType.CHARACTER_SPEECH;
+        private ActionNodeType actionNodeType = ActionNodeType.NONE;
+
+        private bool foldout = true;
+        private List<string> scripts = new List<string>();
+
         private int _selectionCount = 1;
         private int selectionCount
         {
@@ -54,15 +60,21 @@ namespace Dunward
             }
 
             EditorGUILayout.EndHorizontal();
+
+            foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Details");
+            if (foldout && actionNodeType != ActionNodeType.NONE)
+            {
+                for (int i = 0; i < selectionCount; i++)
+                {
+                    EditorGUILayout.LabelField($"{i}");
+                    scripts[i] = EditorGUILayout.TextArea(scripts[i], actionNodeType == ActionNodeType.CHARACTER_SPEECH ? GUILayout.Height(50) : GUILayout.Height(20));
+                }
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
         private void UpdateOutputPort()
         {
-            for (int i = 0; i < main.outputContainer.childCount; i++)
-            {
-                var port = main.outputContainer[i] as Port;
-            }
-
             if (main.outputContainer.childCount > selectionCount)
             {
                 for (int i = main.outputContainer.childCount - 1; i >= selectionCount; i--)
@@ -70,6 +82,7 @@ namespace Dunward
                     var port = main.outputContainer[i] as Port;
                     main.graphView.DeleteElements(port.connections);
                     main.outputContainer.RemoveAt(i);
+                    scripts.RemoveAt(i);
                 }
             }
             else if (main.outputContainer.childCount < selectionCount)
@@ -80,6 +93,7 @@ namespace Dunward
                     outputPort.portName = $"{i}";
                     outputPort.portColor = portColor;
                     main.outputContainer.Add(outputPort);
+                    scripts.Add(string.Empty);
                 }
             }
         }
