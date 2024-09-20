@@ -1,10 +1,7 @@
 #if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
-using UnityEditorInternal;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 
 namespace Dunward
 {
