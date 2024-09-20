@@ -12,7 +12,7 @@ namespace Dunward
 
         public CapricornGraphView()
         {
-            var node = new CapricornGraphNode(lastNodeID, new Vector2(100, 200));
+            var node = new CapricornGraphNode(this, lastNodeID, new Vector2(100, 200));
             AddElement(node);
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
@@ -40,7 +40,7 @@ namespace Dunward
 
         private void AddNode(Vector2 position)
         {
-            AddElement(new CapricornGraphNode(lastNodeID, position));
+            AddElement(new CapricornGraphNode(this, lastNodeID, position));
             lastNodeID++;
         }
     }

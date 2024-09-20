@@ -6,14 +6,17 @@ namespace Dunward
 {
     public class CapricornGraphNodeMainContainer
     {
-        public readonly Node parent;
+        public readonly CapricornGraphNode parent;
         public readonly VisualElement actionContainer;
         public readonly VisualElement coroutineContainer;
         
+        public VisualElement mainContainer => parent.mainContainer;
         public VisualElement inputContainer => parent.inputContainer;
         public VisualElement outputContainer => parent.outputContainer;
 
-        public CapricornGraphNodeMainContainer(Node node)
+        public CapricornGraphView graphView => parent.graphView;
+
+        public CapricornGraphNodeMainContainer(CapricornGraphNode node)
         {
             parent = node;
             var mainContainer = new VisualElement();

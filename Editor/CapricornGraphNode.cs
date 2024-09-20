@@ -7,11 +7,11 @@ namespace Dunward
 {
     public class CapricornGraphNode : Node
     {
-        private EnumField enumField;
-        public string guid;
+        public readonly CapricornGraphView graphView;
 
-        public CapricornGraphNode(int id, float x, float y)
+        public CapricornGraphNode(CapricornGraphView graphView, int id, float x, float y)
         {
+            this.graphView = graphView;
             mainContainer.Insert(1, extensionContainer);
             title = $"{id}";
             SetPosition(new Rect(x, y, 0, 0));
@@ -21,7 +21,7 @@ namespace Dunward
             RefreshExpandedState();
         }
 
-        public CapricornGraphNode(int id, Vector2 mousePosition) : this(id, mousePosition.x, mousePosition.y)
+        public CapricornGraphNode(CapricornGraphView graphView, int id, Vector2 mousePosition) : this(graphView, id, mousePosition.x, mousePosition.y)
         {
 
         }
