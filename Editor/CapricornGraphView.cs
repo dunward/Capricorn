@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
+using Newtonsoft.Json;
 
 namespace Dunward
 {
@@ -12,10 +13,6 @@ namespace Dunward
 
         public CapricornGraphView()
         {
-            //Get Current Graph view center coordinate
-            
-
-
             var node = new CapricornGraphNode(this, -1, new Vector2(100, 200));
             AddElement(node);
             this.AddManipulator(new ContentZoomer());
@@ -42,9 +39,23 @@ namespace Dunward
             return compatiblePorts;
         }
 
+        public string SerializeGraph()
+        {
+            var data = new CapricornGraphData();
+            foreach (var node in nodes)
+            {
+                if (node is CapricornGraphNode capricornGraphNode)
+                {
+                    data.nodes.Add(capricornGraphNode.GetMainData());
+                }
+            }
+            return JsonConvert.SerializeObject(data);
+        }
+
         private void AddNode(Vector2 position)
         {
-            AddElement(new CapricornGraphNode(this, lastNodeID, position));
+            var node = new CapricornGraphNode(this, lastNodeID, position);
+            AddElement(node);
             lastNodeID++;
         }
     }
