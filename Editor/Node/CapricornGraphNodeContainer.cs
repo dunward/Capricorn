@@ -27,8 +27,27 @@ namespace Dunward
 
             coroutineContainer.AddToClassList("capricorn-coroutine-container");
             actionContainer.AddToClassList("capricorn-action-container");
-            var test = new List<string>{ "Test1", "Test2", "Test3" };
+            
+            var test = new List<CapricornGraphCoroutineElement>();
             var list = new ReorderableList(test, typeof(string), true, false, true, true);
+
+            list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+            {
+                var element = test[index];
+                element.OnGUI(rect, index, isActive, isFocused);
+            };
+
+            list.elementHeightCallback = (int index) =>
+            {
+                var element = test[index];
+                return element.GetHeight();
+            };
+
+            list.onAddCallback = (ReorderableList l) =>
+            {
+                test.Add(new CapricornGraphTest());
+            };
+            
             coroutineContainer.Add(new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
@@ -38,6 +57,7 @@ namespace Dunward
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }));
+
 
             var enumField = new EnumField(ActionNodeType.NONE);
             actionContainer.Add(enumField);
