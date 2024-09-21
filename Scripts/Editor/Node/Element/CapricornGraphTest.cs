@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 namespace Dunward
 {
     [System.Serializable]
@@ -6,3 +7,4 @@ namespace Dunward
 
     }
 }
+#endif
