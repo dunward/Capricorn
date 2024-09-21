@@ -1,6 +1,6 @@
 public enum ActionNodeType
 {
     NONE,
-    CHARACTER_SPEECH,
-    TEACHER_SPEECH,
+    CHARACTER_SCRIPT,
+    USER_SCRIPT,
 }
