@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
 using Newtonsoft.Json;
+using System;
 
 namespace Dunward
 {
@@ -31,12 +32,29 @@ namespace Dunward
             UpdateOutputPort();
         }
 
+        public void SerializeConnections()
+        {
+            data.connections = new List<int>();
+
+            for (int i = 0; i < main.outputContainer.childCount; i++)
+            {
+                var port = main.outputContainer[i] as Port;
+
+                foreach (var connection in port.connections)
+                {
+                    var inputPort = connection.input;
+                    var node = inputPort.node as CapricornGraphNode;
+                    data.connections.Add(int.Parse(node.title));
+                }
+            }
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.BeginHorizontal();
             data.actionNodeType = (ActionNodeType)EditorGUILayout.EnumPopup(data.actionNodeType);
 
-            if (data.actionNodeType == ActionNodeType.TEACHER_SPEECH)
+            if (data.actionNodeType == ActionNodeType.USER_SCRIPT)
             {
                 var temp = EditorGUILayout.IntField(data.SelectionCount, GUILayout.Width(20));
                 data.SelectionCount = Mathf.Clamp(temp, 1, 4);
@@ -48,16 +66,43 @@ namespace Dunward
 
             EditorGUILayout.EndHorizontal();
 
-            data.foldout = EditorGUILayout.BeginFoldoutHeaderGroup(data.foldout, "Details");
-            if (data.foldout && data.actionNodeType != ActionNodeType.NONE)
+            if (data.actionNodeType != ActionNodeType.NONE)
             {
-                for (int i = 0; i < data.SelectionCount; i++)
+                data.foldout = EditorGUILayout.BeginFoldoutHeaderGroup(data.foldout, "Details");
+                if (data.foldout)
                 {
-                    EditorGUILayout.LabelField($"{i}");
-                    data.scripts[i] = EditorGUILayout.TextArea(data.scripts[i], data.actionNodeType == ActionNodeType.CHARACTER_SPEECH ? GUILayout.Height(50) : GUILayout.Height(20));
+                    if (data.actionNodeType == ActionNodeType.CHARACTER_SCRIPT)
+                    {
+                        DrawCharacterScript();
+                    }
+                    else if (data.actionNodeType == ActionNodeType.USER_SCRIPT)
+                    {
+                        DrawUserScript();
+                    }
                 }
+                EditorGUILayout.EndFoldoutHeaderGroup();
             }
-            EditorGUILayout.EndFoldoutHeaderGroup();
+        }
+
+        private void DrawCharacterScript()
+        {
+            EditorGUILayout.LabelField("Name");
+            data.name = EditorGUILayout.TextField(data.name);
+            EditorGUILayout.LabelField("Team");
+            data.team = EditorGUILayout.TextField(data.team);
+            EditorGUILayout.LabelField("Script");
+            data.scripts[0] = EditorGUILayout.TextArea(data.scripts[0], GUILayout.Height(50));
+        }
+
+        private void DrawUserScript()
+        {
+            data.name = string.Empty;
+            data.team = string.Empty;
+            for (int i = 0; i < data.SelectionCount; i++)
+            {
+                EditorGUILayout.LabelField($"{i}");
+                data.scripts[i] = EditorGUILayout.TextArea(data.scripts[i], GUILayout.Height(20));
+            }
         }
 
         private void UpdateOutputPort()

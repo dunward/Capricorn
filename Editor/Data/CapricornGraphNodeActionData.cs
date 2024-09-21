@@ -10,6 +10,10 @@ namespace Dunward
         public ActionNodeType actionNodeType = ActionNodeType.NONE;
 
         public bool foldout = true;
+        public List<int> connections;
+
+        public string name;
+        public string team;
         public List<string> scripts = new List<string>();
 
         private int _selectionCount = 1;
