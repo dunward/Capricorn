@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Dunward
@@ -17,6 +18,8 @@ namespace Dunward
         public VisualElement outputContainer => parent.outputContainer;
 
         public CapricornGraphView graphView => parent.graphView;
+
+        public Vector2 GetCurrentMousePosition => graphView.GetCurrentMousePosition();
 
         public CapricornGraphNodeMainContainer(CapricornGraphNode node)
         {

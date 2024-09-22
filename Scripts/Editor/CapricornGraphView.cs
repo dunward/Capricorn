@@ -38,6 +38,12 @@ namespace Dunward
 
             return compatiblePorts;
         }
+        
+        public Vector2 GetCurrentMousePosition()
+        {
+            // Get Screen mouse position]
+            return this.contentViewContainer.LocalToWorld(Event.current.mousePosition);
+        }
 
         public string SerializeGraph()
         {

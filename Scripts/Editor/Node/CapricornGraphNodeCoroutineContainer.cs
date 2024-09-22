@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditorInternal;
+using UnityEditor.Experimental.GraphView;
 
 namespace Dunward
 {
@@ -32,7 +33,9 @@ namespace Dunward
 
             list.onAddCallback = (ReorderableList l) =>
             {
-                test.Add(new CapricornGraphTest());
+                var menu = ScriptableObject.CreateInstance<CapricornGraphCoroutineSearchWindow>();
+                Debug.LogError($"{main.GetCurrentMousePosition}");
+                SearchWindow.Open(new SearchWindowContext(main.GetCurrentMousePosition), menu);
             };
             
             main.coroutineContainer.Add(new IMGUIContainer(() =>
@@ -44,6 +47,37 @@ namespace Dunward
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }));
+        }
+    }
+
+    internal class CapricornGraphCoroutineSearchWindow : ScriptableObject, ISearchWindowProvider
+    {
+        public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
+        {
+            var entries = new List<SearchTreeEntry>
+            {
+                new SearchTreeGroupEntry(new GUIContent("Coroutine"), 1),
+                new SearchTreeEntry(new GUIContent("Coroutine 1"))
+                {
+                    level = 1
+                },
+                new SearchTreeEntry(new GUIContent("Coroutine 2"))
+                {
+                    level = 1
+                },
+                new SearchTreeEntry(new GUIContent("Coroutine 3"))
+                {
+                    level = 1
+                },
+            };
+            return entries;
+        }
+
+        public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
+        {
+            Debug.Log("Selected");
+
+            return false;
         }
     }
 }
