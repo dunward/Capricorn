@@ -15,38 +15,39 @@ namespace Dunward
 
         public CapricornGraphNodeCoroutineContainer(CapricornGraphNodeMainContainer main)
         {
-            
-            var test = new List<CapricornGraphCoroutineElement>();
-            var list = new ReorderableList(test, typeof(string), true, false, true, true);
-
-            list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
-            {
-                var element = test[index];
-                element.OnGUI(rect, index, isActive, isFocused);
-            };
-
-            list.elementHeightCallback = (int index) =>
-            {
-                var element = test[index];
-                return element.GetHeight();
-            };
-
-            list.onAddCallback = (ReorderableList l) =>
-            {
-                var menu = ScriptableObject.CreateInstance<CapricornGraphCoroutineSearchWindow>();
-                Debug.LogError($"{main.GetCurrentMousePosition}");
-                SearchWindow.Open(new SearchWindowContext(main.GetCurrentMousePosition), menu);
-            };
-            
-            main.coroutineContainer.Add(new IMGUIContainer(() =>
+            var elements = new List<CapricornGraphCoroutineElement>();
+            var coroutineList = new ReorderableList(elements, typeof(string), true, false, true, true);
+            var container = new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
                 if (foldout)
                 {
-                    list.DoLayoutList();
+                    coroutineList.DoLayoutList();
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
-            }));
+            });
+
+            coroutineList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+            {
+                var element = elements[index];
+                element.OnGUI(rect, index, isActive, isFocused);
+            };
+
+            coroutineList.elementHeightCallback = (int index) =>
+            {
+                var element = elements[index];
+                return element.GetHeight();
+            };
+
+            coroutineList.onAddCallback = (ReorderableList l) =>
+            {
+                var menu = ScriptableObject.CreateInstance<CapricornGraphCoroutineSearchWindow>();
+                var current = Event.current.mousePosition;
+                current.y += 130; // Unity default search window height 320 and header height 30. So, 320 / 2 - 30 = 130
+                SearchWindow.Open(new SearchWindowContext(container.ChangeCoordinatesTo(main.graphView, current)), menu);
+            };
+            
+            main.coroutineContainer.Add(container);
         }
     }
 
@@ -56,10 +57,10 @@ namespace Dunward
         {
             var entries = new List<SearchTreeEntry>
             {
-                new SearchTreeGroupEntry(new GUIContent("Coroutine"), 1),
+                new SearchTreeGroupEntry(new GUIContent("Coroutine"), 0),
                 new SearchTreeEntry(new GUIContent("Coroutine 1"))
                 {
-                    level = 1
+                    level = 0
                 },
                 new SearchTreeEntry(new GUIContent("Coroutine 2"))
                 {

@@ -19,8 +19,6 @@ namespace Dunward
 
         public CapricornGraphView graphView => parent.graphView;
 
-        public Vector2 GetCurrentMousePosition => graphView.GetCurrentMousePosition();
-
         public CapricornGraphNodeMainContainer(CapricornGraphNode node)
         {
             parent = node;
