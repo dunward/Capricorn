@@ -49,6 +49,12 @@ namespace Dunward
             }
         }
 
+        public void DeserializeConnections(CapricornGraphNodeActionData data)
+        {
+            this.data = data;
+            data.onUpdateSelectionCount += UpdateOutputPort;
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.BeginHorizontal();

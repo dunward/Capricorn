@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -15,14 +16,12 @@ namespace Dunward
 
         public CapricornGraphView()
         {
-            var node = new CapricornGraphNode(this, -1, new Vector2(100, 200));
-            AddElement(node);
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
-            this.AddManipulator(new DragAndDropManipulator());
 
+            this.AddManipulator(new DragAndDropManipulator(data => Load(data)));
             this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node", action => AddNode(action.eventInfo.localMousePosition), DropdownMenuAction.AlwaysEnabled)));
         }
 
@@ -55,6 +54,23 @@ namespace Dunward
             return JsonConvert.SerializeObject(data);
         }
 
+        public void Load(string json)
+        {
+            ClearGraph();
+
+            var data = JsonConvert.DeserializeObject<CapricornGraphData>(json);
+            foreach (var nodeData in data.nodes)
+            {
+                var node = new CapricornGraphNode(this, nodeData);
+                AddElement(node);
+            }
+        }
+        
+        private void ClearGraph()
+        {
+            DeleteElements(nodes.ToList());
+        }
+
         private void AddNode(Vector2 position)
         {
             var node = new CapricornGraphNode(this, lastNodeID, position);
@@ -65,10 +81,11 @@ namespace Dunward
         private class DragAndDropManipulator : PointerManipulator
         {
             private Object item;
+            private readonly System.Action<string> onLoadGraph;
 
-            public DragAndDropManipulator()
+            public DragAndDropManipulator(System.Action<string> onLoadGraph)
             {
-                
+                this.onLoadGraph = onLoadGraph;
             }
 
             protected override void RegisterCallbacksOnTarget()
@@ -102,10 +119,10 @@ namespace Dunward
                 DragAndDrop.visualMode = IsSingleTextAsset() ? DragAndDropVisualMode.Link : DragAndDropVisualMode.Rejected;
             }
 
-            private void OnDragPerform(DragPerformEvent evt)
+            private void OnDragPerform(DragPerformEvent _)
             {
                 var textAsset = item as TextAsset;
-                Debug.LogError(textAsset.text);
+                onLoadGraph?.Invoke(textAsset.text);
             }
 
             private bool IsSingleTextAsset()
@@ -115,3 +132,4 @@ namespace Dunward
         }
     }
 }
+#endif
