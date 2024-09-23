@@ -1,12 +1,14 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.Experimental.GraphView;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+
 using Newtonsoft.Json;
-using System;
 
 namespace Dunward.Capricorn
 {
@@ -123,7 +125,6 @@ namespace Dunward.Capricorn
                     var port = main.outputContainer[i] as Port;
                     main.graphView.DeleteElements(port.connections);
                     main.outputContainer.RemoveAt(i);
-                    data.scripts.RemoveAt(i);
                 }
             }
             else if (main.outputContainer.childCount < data.SelectionCount)
@@ -137,6 +138,8 @@ namespace Dunward.Capricorn
                     data.scripts.Add(string.Empty);
                 }
             }
+
+            data.scripts = data.scripts.Take(data.SelectionCount).ToList();
         }
     }
 }
