@@ -9,13 +9,13 @@ using UnityEditor.Experimental.GraphView;
 
 using Newtonsoft.Json;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
-    public class CapricornGraphView : GraphView
+    public class GraphView : UnityEditor.Experimental.GraphView.GraphView
     {
         private int lastNodeID = 0;
 
-        public CapricornGraphView()
+        public GraphView()
         {
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
@@ -44,10 +44,10 @@ namespace Dunward
 
         public string SerializeGraph()
         {
-            var data = new CapricornGraphData();
+            var data = new GraphData();
             foreach (var node in nodes)
             {
-                if (node is CapricornGraphNode capricornGraphNode)
+                if (node is Node capricornGraphNode)
                 {
                     data.nodes.Add(capricornGraphNode.GetMainData());
                 }
@@ -59,10 +59,10 @@ namespace Dunward
         {
             ClearGraph();
 
-            var data = JsonConvert.DeserializeObject<CapricornGraphData>(json);
+            var data = JsonConvert.DeserializeObject<GraphData>(json);
             foreach (var nodeData in data.nodes)
             {
-                var node = new CapricornGraphNode(this, nodeData);
+                var node = new Node(this, nodeData);
                 AddElement(node);
             }
 
@@ -74,13 +74,13 @@ namespace Dunward
         {
             foreach (var node in nodes)
             {
-                var cn = node as CapricornGraphNode;
+                var cn = node as Node;
                 for (int i = 0; i < cn.main.action.data.connections.Count; i++)
                 {
                     var connection = cn.main.action.data.connections[i];
                     var outputPort = cn.outputContainer[i] as Port;
-                    var inputPort = nodes.Where(n => n is CapricornGraphNode)
-                                        .Cast<CapricornGraphNode>()
+                    var inputPort = nodes.Where(n => n is Node)
+                                        .Cast<Node>()
                                         .First(n => n.ID == connection).inputContainer[0] as Port;
 
                     var edge = outputPort.ConnectTo(inputPort);
@@ -96,7 +96,7 @@ namespace Dunward
 
         private void AddNode(Vector2 position)
         {
-            var node = new CapricornGraphNode(this, ++lastNodeID, position);
+            var node = new Node(this, ++lastNodeID, position);
             AddElement(node);
         }
 

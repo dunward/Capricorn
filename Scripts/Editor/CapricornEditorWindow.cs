@@ -3,13 +3,13 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using Unity.VisualScripting;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
     public class CapricornEditorWindow : EditorWindow
     {
         public StyleSheet graphStyle;
 
-        private CapricornGraphView graphView;
+        private GraphView graphView;
 
         [MenuItem("Constellation/Capricorn/Graph View")]
         public static void ShowExample()
@@ -53,7 +53,7 @@ namespace Dunward
         private void AddGraphView()
         {
             var content = new VisualElement();
-            graphView = new CapricornGraphView();
+            graphView = new GraphView();
             content.styleSheets.Add(graphStyle);
             content.name = "content";
             content.Add(graphView);

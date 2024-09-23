@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
     [System.Serializable]
-    public class CapricornGraphNodeActionData
+    public class NodeActionData
     {
         public ActionNodeType actionNodeType = ActionNodeType.NONE;
 

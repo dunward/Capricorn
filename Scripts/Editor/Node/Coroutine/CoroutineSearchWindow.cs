@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
-    public class CapricornGraphCoroutineSearchWindow : ScriptableObject, ISearchWindowProvider
+    public class CoroutineSearchWindow : ScriptableObject, ISearchWindowProvider
     {
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
@@ -21,7 +21,7 @@ namespace Dunward
                 {
                     level = 1,
                 },
-                new SearchTreeEntry(new GUIContent("Coroutine 1"))
+                new SearchTreeEntry(new GUIContent("Coroutine 2", emptyTexture))
                 {
                     level = 1,
                 },
@@ -31,9 +31,8 @@ namespace Dunward
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            Debug.Log("Selected");
-
-            return false;
+            Debug.LogError(SearchTreeEntry.userData);
+            return true;
         }
     }
 }

@@ -9,15 +9,15 @@ using UnityEditor.Experimental.GraphView;
 using System.Reflection;
 using System.Linq;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
-    public class CapricornGraphNodeCoroutineContainer
+    public class NodeCoroutineContainer
     {
         private bool foldout = true;
 
-        public CapricornGraphNodeCoroutineContainer(CapricornGraphNodeMainContainer main)
+        public NodeCoroutineContainer(NodeMainContainer main)
         {
-            var elements = new List<CapricornGraphCoroutineUnit>();
+            var elements = new List<CoroutineUnit>();
             var coroutineList = new ReorderableList(elements, typeof(string), true, false, true, true);
             var container = new IMGUIContainer(() =>
             {
@@ -43,10 +43,10 @@ namespace Dunward
 
             coroutineList.onAddCallback = (ReorderableList l) =>
             {
-                var menu = ScriptableObject.CreateInstance<CapricornGraphCoroutineSearchWindow>();
-                var assembly = Assembly.GetAssembly(typeof(CapricornGraphCoroutineUnit));
+                var menu = ScriptableObject.CreateInstance<CoroutineSearchWindow>();
+                var assembly = Assembly.GetAssembly(typeof(CoroutineUnit));
                 var derivedTypes = assembly.GetTypes()
-                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CapricornGraphCoroutineUnit)))
+                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CoroutineUnit)))
                     .ToList();
 
                 foreach (var type in derivedTypes)

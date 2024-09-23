@@ -2,24 +2,24 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
-    public class CapricornGraphNodeMainContainer
+    public class NodeMainContainer
     {
-        public readonly CapricornGraphNode parent;
+        public readonly Node parent;
         public readonly VisualElement coroutineContainer;
         public readonly VisualElement actionContainer;
 
-        public readonly CapricornGraphNodeCoroutineContainer coroutine;
-        public readonly CapricornGraphNodeActionContainer action;
+        public readonly NodeCoroutineContainer coroutine;
+        public readonly NodeActionContainer action;
         
         public VisualElement mainContainer => parent.mainContainer;
         public VisualElement inputContainer => parent.inputContainer;
         public VisualElement outputContainer => parent.outputContainer;
 
-        public CapricornGraphView graphView => parent.graphView;
+        public GraphView graphView => parent.graphView;
 
-        public CapricornGraphNodeMainContainer(CapricornGraphNode node)
+        public NodeMainContainer(Node node)
         {
             parent = node;
             var mainContainer = new VisualElement();
@@ -31,8 +31,8 @@ namespace Dunward
             coroutineContainer.AddToClassList("capricorn-coroutine-container");
             actionContainer.AddToClassList("capricorn-action-container");
 
-            coroutine = new CapricornGraphNodeCoroutineContainer(this);
-            action = new CapricornGraphNodeActionContainer(this);
+            coroutine = new NodeCoroutineContainer(this);
+            action = new NodeActionContainer(this);
 
             mainContainer.Add(coroutineContainer);
             mainContainer.Add(actionContainer);

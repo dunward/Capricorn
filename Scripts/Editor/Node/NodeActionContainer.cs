@@ -8,16 +8,16 @@ using UnityEditor;
 using Newtonsoft.Json;
 using System;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
-    public class CapricornGraphNodeActionContainer
+    public class NodeActionContainer
     {
-        public CapricornGraphNodeActionData data = new CapricornGraphNodeActionData();
+        public NodeActionData data = new NodeActionData();
 
-        private CapricornGraphNodeMainContainer main;
+        private NodeMainContainer main;
         private Color portColor = new Color(0.69f, 0.98f, 0.34f);
 
-        public CapricornGraphNodeActionContainer(CapricornGraphNodeMainContainer main)
+        public NodeActionContainer(NodeMainContainer main)
         {
             this.main = main;
             data.onUpdateSelectionCount += UpdateOutputPort;
@@ -43,13 +43,13 @@ namespace Dunward
                 foreach (var connection in port.connections)
                 {
                     var inputPort = connection.input;
-                    var node = inputPort.node as CapricornGraphNode;
+                    var node = inputPort.node as Node;
                     data.connections.Add(int.Parse(node.title));
                 }
             }
         }
 
-        public void DeserializeConnections(CapricornGraphNodeActionData data)
+        public void DeserializeConnections(NodeActionData data)
         {
             this.data = data;
             data.onUpdateSelectionCount += UpdateOutputPort;

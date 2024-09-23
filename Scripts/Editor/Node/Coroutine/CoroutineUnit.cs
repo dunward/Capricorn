@@ -2,10 +2,10 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Dunward
+namespace Dunward.Capricorn
 {
     [System.Serializable]
-    public abstract class CapricornGraphCoroutineUnit
+    public abstract class CoroutineUnit
     {
         protected bool isWaitingUntilFinish;
         protected virtual string info => "Coroutine Element";
