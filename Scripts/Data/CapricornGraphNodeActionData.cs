@@ -13,7 +13,7 @@ namespace Dunward
         public List<int> connections;
 
         public string name;
-        public string team;
+        public string subName;
         public List<string> scripts = new List<string>();
 
         private int _selectionCount = 1;

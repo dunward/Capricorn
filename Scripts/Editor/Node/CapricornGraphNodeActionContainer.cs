@@ -95,8 +95,8 @@ namespace Dunward
         {
             EditorGUILayout.LabelField("Name");
             data.name = EditorGUILayout.TextField(data.name);
-            EditorGUILayout.LabelField("Team");
-            data.team = EditorGUILayout.TextField(data.team);
+            EditorGUILayout.LabelField("Sub Name");
+            data.subName = EditorGUILayout.TextField(data.subName);
             EditorGUILayout.LabelField("Script");
             GUIStyle textAreaStyle = new GUIStyle(EditorStyles.textArea);
             textAreaStyle.wordWrap = true;
@@ -106,7 +106,7 @@ namespace Dunward
         private void DrawUserScript()
         {
             data.name = string.Empty;
-            data.team = string.Empty;
+            data.subName = string.Empty;
             for (int i = 0; i < data.SelectionCount; i++)
             {
                 EditorGUILayout.LabelField($"{i}");
