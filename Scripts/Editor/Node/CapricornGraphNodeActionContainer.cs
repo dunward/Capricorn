@@ -98,7 +98,9 @@ namespace Dunward
             EditorGUILayout.LabelField("Team");
             data.team = EditorGUILayout.TextField(data.team);
             EditorGUILayout.LabelField("Script");
-            data.scripts[0] = EditorGUILayout.TextArea(data.scripts[0], GUILayout.Height(50));
+            GUIStyle textAreaStyle = new GUIStyle(EditorStyles.textArea);
+            textAreaStyle.wordWrap = true;
+            data.scripts[0] = EditorGUILayout.TextArea(data.scripts[0], textAreaStyle, GUILayout.Height(50));
         }
 
         private void DrawUserScript()
