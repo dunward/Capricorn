@@ -2,7 +2,7 @@
 namespace Dunward
 {
     [System.Serializable]
-    public class CapricornGraphTest : CapricornGraphCoroutineElement
+    public class CapricornCoroutinePlayMusic : CapricornGraphCoroutineUnit
     {
 
     }
