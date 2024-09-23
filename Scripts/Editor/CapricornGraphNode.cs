@@ -12,6 +12,10 @@ namespace Dunward
         public readonly CapricornGraphNodeMainContainer main;
 
         private int id;
+        public int ID
+        {
+            get => id;
+        }
 
         public CapricornGraphNode(CapricornGraphView graphView, int id, float x, float y)
         {
@@ -32,15 +36,27 @@ namespace Dunward
 
         }
 
+        public CapricornGraphNode(CapricornGraphView graphView, CapricornGraphNodeMainData mainData) : this(graphView, mainData.id, mainData.x, mainData.y)
+        {
+            UpdateSubContainers(mainData);
+        }
+
         public CapricornGraphNodeMainData GetMainData()
         {
             main.action.SerializeConnections();
 
             var mainData = new CapricornGraphNodeMainData();
             mainData.id = id;
+            mainData.x = GetPosition().x;
+            mainData.y = GetPosition().y;
             mainData.actionData = main.action.data;
 
             return mainData;
+        }
+        
+        private void UpdateSubContainers(CapricornGraphNodeMainData mainData)
+        {
+            main.action.DeserializeConnections(mainData.actionData);
         }
     }
 }

@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -64,8 +65,30 @@ namespace Dunward
                 var node = new CapricornGraphNode(this, nodeData);
                 AddElement(node);
             }
+
+            ConnectDeserializeNodes();
+            lastNodeID = data.nodes.Max(n => n.id);
         }
         
+        private void ConnectDeserializeNodes()
+        {
+            foreach (var node in nodes)
+            {
+                var cn = node as CapricornGraphNode;
+                for (int i = 0; i < cn.main.action.data.connections.Count; i++)
+                {
+                    var connection = cn.main.action.data.connections[i];
+                    var outputPort = cn.outputContainer[i] as Port;
+                    var inputPort = nodes.Where(n => n is CapricornGraphNode)
+                                        .Cast<CapricornGraphNode>()
+                                        .First(n => n.ID == connection).inputContainer[0] as Port;
+
+                    var edge = outputPort.ConnectTo(inputPort);
+                    AddElement(edge);
+                }
+            }
+        }
+
         private void ClearGraph()
         {
             DeleteElements(nodes.ToList());
@@ -73,9 +96,8 @@ namespace Dunward
 
         private void AddNode(Vector2 position)
         {
-            var node = new CapricornGraphNode(this, lastNodeID, position);
+            var node = new CapricornGraphNode(this, ++lastNodeID, position);
             AddElement(node);
-            lastNodeID++;
         }
 
         private class DragAndDropManipulator : PointerManipulator

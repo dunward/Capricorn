@@ -53,6 +53,7 @@ namespace Dunward
         {
             this.data = data;
             data.onUpdateSelectionCount += UpdateOutputPort;
+            UpdateOutputPort();
         }
 
         private void OnGUI()
