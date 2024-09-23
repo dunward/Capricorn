@@ -17,7 +17,7 @@ namespace Dunward
 
         public CapricornGraphNodeCoroutineContainer(CapricornGraphNodeMainContainer main)
         {
-            var elements = new List<CapricornGraphCoroutineElement>();
+            var elements = new List<CapricornGraphCoroutineUnit>();
             var coroutineList = new ReorderableList(elements, typeof(string), true, false, true, true);
             var container = new IMGUIContainer(() =>
             {
@@ -44,16 +44,16 @@ namespace Dunward
             coroutineList.onAddCallback = (ReorderableList l) =>
             {
                 var menu = ScriptableObject.CreateInstance<CapricornGraphCoroutineSearchWindow>();
-                var assembly = Assembly.GetAssembly(typeof(CapricornGraphCoroutineElement));
+                var assembly = Assembly.GetAssembly(typeof(CapricornGraphCoroutineUnit));
                 var derivedTypes = assembly.GetTypes()
-                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CapricornGraphCoroutineElement)))
+                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CapricornGraphCoroutineUnit)))
                     .ToList();
 
                 foreach (var type in derivedTypes)
                 {
                     Debug.LogError(type);
                 }
-                
+
                 var current = Event.current.mousePosition;
                 current.y += 130; // Unity default search window height 320 and header height 30. So, 320 / 2 - 30 = 130
                 SearchWindow.Open(new SearchWindowContext(container.ChangeCoordinatesTo(main.graphView, current)), menu);

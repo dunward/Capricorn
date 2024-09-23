@@ -6,7 +6,7 @@ using UnityEditor;
 namespace Dunward
 {
     [System.Serializable]
-    public abstract class CapricornGraphCoroutineElement
+    public abstract class CapricornGraphCoroutineUnit
     {
         protected bool isWaitingUntilFinish;
         protected virtual string info => "Coroutine Element";
