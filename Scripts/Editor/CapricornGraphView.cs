@@ -144,7 +144,9 @@ namespace Dunward
             private void OnDragPerform(DragPerformEvent _)
             {
                 var textAsset = item as TextAsset;
+                EditorUtility.DisplayProgressBar("Capricorn", "Load Graph...", 0.112f);
                 onLoadGraph?.Invoke(textAsset.text);
+                EditorUtility.ClearProgressBar();
             }
 
             private bool IsSingleTextAsset()
