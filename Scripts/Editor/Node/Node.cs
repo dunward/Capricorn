@@ -2,12 +2,14 @@ using UnityEngine;
 
 namespace Dunward.Capricorn
 {
-    public class Node : UnityEditor.Experimental.GraphView.Node
+    public abstract class Node : UnityEditor.Experimental.GraphView.Node
     {
         public readonly GraphView graphView;
         public readonly NodeMainContainer main;
 
-        private int id;
+        protected string customTitle;
+
+        protected int id;
         public int ID
         {
             get => id;
@@ -18,8 +20,10 @@ namespace Dunward.Capricorn
             this.graphView = graphView;
             this.id = id;
 
+            titleContainer.AddToClassList("capricorn-title-container");
             mainContainer.Insert(1, extensionContainer);
-            title = $"{id}";
+
+            SetupTitleContainer();
             SetPosition(new Rect(x, y, 0, 0));
 
             main = new NodeMainContainer(this);
@@ -37,7 +41,7 @@ namespace Dunward.Capricorn
             UpdateSubContainers(mainData);
         }
 
-        public NodeMainData GetMainData()
+        public virtual NodeMainData GetMainData()
         {
             main.action.SerializeConnections();
 
@@ -49,6 +53,8 @@ namespace Dunward.Capricorn
 
             return mainData;
         }
+
+        protected abstract void SetupTitleContainer();
         
         private void UpdateSubContainers(NodeMainData mainData)
         {

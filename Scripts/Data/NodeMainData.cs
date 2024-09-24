@@ -4,8 +4,18 @@ namespace Dunward.Capricorn
     public class NodeMainData
     {
         public int id;
+        public string title;
         public float x;
         public float y;
         public NodeActionData actionData;
+        public NodeType nodeType;
+    }
+
+    public enum NodeType
+    {
+        None,
+        Input,
+        Output,
+        Connector
     }
 }
