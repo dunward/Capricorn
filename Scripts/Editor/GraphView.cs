@@ -72,6 +72,8 @@ namespace Dunward.Capricorn
                         AddElement(inputNode);
                         break;
                     case NodeType.Output:
+                        var outputNode = new OutputNode(this, nodeData);
+                        AddElement(outputNode);
                         break;
                     case NodeType.Connector:
                     default:
