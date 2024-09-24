@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
-    public class Node : UnityEditor.Experimental.GraphView.Node
+    public abstract class Node : UnityEditor.Experimental.GraphView.Node
     {
         public readonly GraphView graphView;
         public readonly NodeMainContainer main;
+
+        private string nodeTitle;
 
         protected int id;
         public int ID
@@ -17,9 +20,12 @@ namespace Dunward.Capricorn
         {
             this.graphView = graphView;
             this.id = id;
+            
+            titleContainer.AddToClassList("capricorn-top-container");
+            titleContainer.Insert(0, new TextField { value = "Node" });
 
             mainContainer.Insert(1, extensionContainer);
-            title = $"{id}";
+
 
             SetPosition(new Rect(x, y, 0, 0));
 
