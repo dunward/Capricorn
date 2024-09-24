@@ -4,6 +4,7 @@ namespace Dunward.Capricorn
     public class NodeMainData
     {
         public int id;
+        public string title;
         public float x;
         public float y;
         public NodeActionData actionData;
