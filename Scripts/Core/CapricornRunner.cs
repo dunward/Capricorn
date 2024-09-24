@@ -36,12 +36,7 @@ namespace Dunward.Capricorn
             }
         }
 
-        public IEnumerator Run(MonoBehaviour monoBehaviour)
-        {
-            yield return RunTask(monoBehaviour).AsCoroutine();
-        }
-
-        private async Task RunTask(MonoBehaviour monoBehaviour)
+        public IEnumerator Run()
         {
             var currentNode = startNode;
 
@@ -57,13 +52,13 @@ namespace Dunward.Capricorn
                 {
                     case TextDisplayer textDisplayer:
                         inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
-                        await textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp).AsTask(monoBehaviour);
+                        yield return textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp);
                         break;
                     case SelectionDisplayer selectionDisplayer:
                         break;
                 }
 
-                if (currentNode.nodeType == NodeType.Output) return;
+                if (currentNode.nodeType == NodeType.Output) yield break;
                 currentNode = GetNextNode(currentNode);
             }
         }
