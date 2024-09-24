@@ -6,17 +6,21 @@ namespace Dunward.Capricorn
 {
     public class TextDisplayer : ActionPlayer
     {
-        private NodeActionData actionData;
+        private bool skip = false;
 
-        public TextDisplayer(NodeActionData actionData)
+        public TextDisplayer(NodeActionData actionData) : base(actionData)
         {
-            this.actionData = actionData;
         }
 
         public override IEnumerator Run()
         {
             Debug.LogError($"{actionData.scripts[0]}");
             yield return null;
+        }
+
+        public override int Next()
+        {
+            return actionData.connections[0];
         }
     }
 }

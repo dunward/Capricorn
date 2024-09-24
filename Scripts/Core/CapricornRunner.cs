@@ -60,7 +60,7 @@ namespace Dunward.Capricorn
                 case ActionNodeType.USER_SCRIPT:
                     return new SelectionDisplayer(actionData);
                 default:
-                    return new ActionPlayer();
+                    return new ActionPlayer(actionData);
             }
         }
     }

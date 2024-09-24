@@ -7,11 +7,8 @@ namespace Dunward.Capricorn
 {
     public class SelectionDisplayer : ActionPlayer
     {
-        private NodeActionData actionData;
-
-        public SelectionDisplayer(NodeActionData actionData)
+        public SelectionDisplayer(NodeActionData actionData) : base(actionData)
         {
-            this.actionData = actionData;
         }
 
         public override IEnumerator Run()
