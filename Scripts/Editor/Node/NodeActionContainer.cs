@@ -17,7 +17,6 @@ namespace Dunward.Capricorn
         public NodeActionData data = new NodeActionData();
 
         private NodeMainContainer main;
-        private Color portColor = new Color(0.69f, 0.98f, 0.34f);
 
         public NodeActionContainer(NodeMainContainer main)
         {
@@ -28,7 +27,7 @@ namespace Dunward.Capricorn
 
             var inputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
             inputPort.portName = string.Empty;
-            inputPort.portColor = portColor;
+            inputPort.portColor = CapricornColors.Green;
             main.inputContainer.Add(inputPort);
             
             UpdateOutputPort();
@@ -133,7 +132,7 @@ namespace Dunward.Capricorn
                 {
                     var outputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
                     outputPort.portName = $"{i}";
-                    outputPort.portColor = portColor;
+                    outputPort.portColor = CapricornColors.Green;
                     main.outputContainer.Add(outputPort);
                     data.scripts.Add(string.Empty);
                 }
