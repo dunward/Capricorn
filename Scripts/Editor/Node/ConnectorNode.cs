@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
@@ -16,22 +17,14 @@ namespace Dunward.Capricorn
         {
         }
 
-        public NodeMainData GetMainData()
-        {
-            main.action.SerializeConnections();
-
-            var mainData = new NodeMainData();
-            mainData.id = id;
-            mainData.x = GetPosition().x;
-            mainData.y = GetPosition().y;
-            mainData.actionData = main.action.data;
-
-            return mainData;
-        }
-        
         private void UpdateSubContainers(NodeMainData mainData)
         {
             main.action.DeserializeConnections(mainData.actionData);
+        }
+
+        protected override void SetupTitleContainer()
+        {
+            titleContainer.Insert(0, new TextField { value = "Node" });
         }
     }
 }
