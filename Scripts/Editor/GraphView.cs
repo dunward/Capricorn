@@ -50,7 +50,7 @@ namespace Dunward.Capricorn
             var data = new GraphData();
             foreach (var node in nodes)
             {
-                if (node is Node capricornGraphNode)
+                if (node is BaseNode capricornGraphNode)
                 {
                     data.nodes.Add(capricornGraphNode.GetMainData());
                 }
@@ -68,6 +68,9 @@ namespace Dunward.Capricorn
                 switch (nodeData.nodeType)
                 {
                     case NodeType.Input:
+                        var inputNode = new InputNode(this, nodeData);
+                        AddElement(inputNode);
+                        break;
                     case NodeType.Output:
                         break;
                     case NodeType.Connector:
@@ -86,13 +89,13 @@ namespace Dunward.Capricorn
         {
             foreach (var node in nodes)
             {
-                var cn = node as Node;
+                var cn = node as BaseNode;
                 for (int i = 0; i < cn.main.action.data.connections.Count; i++)
                 {
                     var connection = cn.main.action.data.connections[i];
                     var outputPort = cn.outputContainer[i] as Port;
-                    var inputPort = nodes.Where(n => n is Node)
-                                        .Cast<Node>()
+                    var inputPort = nodes.Where(n => n is BaseNode)
+                                        .Cast<BaseNode>()
                                         .First(n => n.ID == connection).inputContainer[0] as Port;
 
                     var edge = outputPort.ConnectTo(inputPort);

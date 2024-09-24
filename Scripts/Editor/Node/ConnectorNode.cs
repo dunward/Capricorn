@@ -1,12 +1,16 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
-    public class ConnectorNode : Node
+    public class ConnectorNode : BaseNode
     {
+        private TextField customField;
+
         public ConnectorNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
+            nodeType = NodeType.Connector;
         }
 
         public ConnectorNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
@@ -24,21 +28,27 @@ namespace Dunward.Capricorn
 
         protected override void SetupTitleContainer()
         {
-            var title = new TextField() { value = $"{id}" };
-            title.RegisterValueChangedCallback(evt =>
+            customField = new TextField() { value = string.IsNullOrEmpty(customTitle) ? $"{id}" : customTitle };
+            customField.RegisterValueChangedCallback(evt =>
             {
                 customTitle = evt.newValue;
             });
-            title.RegisterCallback<FocusOutEvent>(evt =>
+            customField.RegisterCallback<FocusOutEvent>(evt =>
             {
-                if (string.IsNullOrEmpty(title.value))
+                if (string.IsNullOrEmpty(customField.value))
                 {
                     customTitle = string.Empty;
-                    title.value = $"{id}";
+                    customField.value = $"{id}";
                 }
             });
 
-            titleContainer.Insert(0, title);
+            titleContainer.Insert(0, customField);
+        }
+
+        protected override void Repaint()
+        {
+            customField.value = string.IsNullOrEmpty(customTitle) ? $"{id}" : customTitle;
         }
     }
 }
+#endif

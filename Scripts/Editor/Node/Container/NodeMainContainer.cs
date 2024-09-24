@@ -6,7 +6,7 @@ namespace Dunward.Capricorn
 {
     public class NodeMainContainer
     {
-        public readonly Node parent;
+        public readonly BaseNode parent;
         public readonly VisualElement coroutineContainer;
         public readonly VisualElement actionContainer;
 
@@ -19,7 +19,7 @@ namespace Dunward.Capricorn
 
         public GraphView graphView => parent.graphView;
 
-        public NodeMainContainer(Node node)
+        public NodeMainContainer(BaseNode node)
         {
             parent = node;
             var mainContainer = new VisualElement();

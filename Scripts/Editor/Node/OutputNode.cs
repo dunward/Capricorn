@@ -1,14 +1,13 @@
-using System.Runtime.Remoting.Contexts;
-using UnityEditor.Experimental.GraphView;
+#if UNITY_EDITOR
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
-    public class OutputNode : Node
+    public class OutputNode : BaseNode
     {
         public OutputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
+            nodeType = NodeType.Output;
         }
 
         public OutputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
@@ -31,3 +30,4 @@ namespace Dunward.Capricorn
         }
     }
 }
+#endif

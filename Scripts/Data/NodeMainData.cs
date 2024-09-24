@@ -7,8 +7,8 @@ namespace Dunward.Capricorn
         public string title;
         public float x;
         public float y;
-        public NodeActionData actionData;
         public NodeType nodeType;
+        public NodeActionData actionData;
     }
 
     public enum NodeType

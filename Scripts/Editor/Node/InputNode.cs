@@ -1,12 +1,14 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 
 namespace Dunward.Capricorn
 {
-    public class InputNode : Node
+    public class InputNode : BaseNode
     {
         public InputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
+            nodeType = NodeType.Input;
             capabilities &= ~Capabilities.Deletable;
         }
 
@@ -30,3 +32,4 @@ namespace Dunward.Capricorn
         }
     }
 }
+#endif

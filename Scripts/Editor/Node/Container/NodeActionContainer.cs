@@ -44,8 +44,8 @@ namespace Dunward.Capricorn
                 foreach (var connection in port.connections)
                 {
                     var inputPort = connection.input;
-                    var node = inputPort.node as Node;
-                    data.connections.Add(int.Parse(node.title));
+                    var node = inputPort.node as BaseNode;
+                    data.connections.Add(node.ID);
                 }
             }
         }
