@@ -13,6 +13,51 @@
 }
 
 .graphElement {
-    min-width: 300px;
-    max-width: 300px;
+    min-width: 250px;
+    max-width: 250px;
+}
+
+.capricorn-title-container-input {
+    background-color: #FFFFFF;
+}
+
+.capricorn-title-container > Label {
+    font-size: 14px;
+}
+
+.capricorn-title-container > TextField {
+    margin-left: 6px;
+    flex-basis: 0%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 20px;
+    align-self: center;
+}
+
+.capricorn-title-container > TextField > TextInput {
+    background-color: var(--unity-colors-window-background);
+    border-top-color: var(--unity-colors-window-background);
+    border-left-color: var(--unity-colors-window-background);
+    border-bottom-color: var(--unity-colors-window-background);
+    border-right-color: var(--unity-colors-window-background);
+}
+
+.capricorn-title-container > TextField > TextInput:hover {
+    background-color: var(--unity-colors-input_field-background);
+    border-top-color: var(--unity-colors-input_field-border);
+    border-left-color: var(--unity-colors-input_field-border);
+    border-bottom-color: var(--unity-colors-input_field-border);
+    border-right-color: var(--unity-colors-input_field-border);
+}
+
+.capricorn-title-container > TextField > TextInput:checked {
+    background-color: var(--unity-colors-input_field-background);
+    border-top-color: var(--unity-colors-input_field-border);
+    border-left-color: var(--unity-colors-input_field-border);
+    border-bottom-color: var(--unity-colors-input_field-border);
+    border-right-color: var(--unity-colors-input_field-border);
+}
+
+.capricorn-title-container > TextField > TextInput > TextElement {
+    font-size: 14px;
 }
