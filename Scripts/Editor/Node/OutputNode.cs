@@ -19,22 +19,15 @@ namespace Dunward.Capricorn
         {
         }
 
-        public NodeMainData GetMainData()
-        {
-            main.action.SerializeConnections();
-
-            var mainData = new NodeMainData();
-            mainData.id = id;
-            mainData.x = GetPosition().x;
-            mainData.y = GetPosition().y;
-            mainData.actionData = main.action.data;
-
-            return mainData;
-        }
-
         private void UpdateSubContainers(NodeMainData mainData)
         {
             main.action.DeserializeConnections(mainData.actionData);
+        }
+
+        protected override void SetupTitleContainer()
+        {
+            titleContainer.style.backgroundColor = CapricornColors.OutputTitleHeader;
+            title = "Output";
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Dunward.Capricorn
 
             var inputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(float));
             inputPort.portName = string.Empty;
-            inputPort.portColor = CapricornColors.Green;
+            inputPort.portColor = CapricornColors.Port;
             main.inputContainer.Add(inputPort);
             
             UpdateOutputPort();
@@ -132,7 +132,7 @@ namespace Dunward.Capricorn
                 {
                     var outputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
                     outputPort.portName = $"{i}";
-                    outputPort.portColor = CapricornColors.Green;
+                    outputPort.portColor = CapricornColors.Port;
                     main.outputContainer.Add(outputPort);
                     data.scripts.Add(string.Empty);
                 }

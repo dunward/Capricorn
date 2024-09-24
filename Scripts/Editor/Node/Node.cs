@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
@@ -7,8 +6,6 @@ namespace Dunward.Capricorn
     {
         public readonly GraphView graphView;
         public readonly NodeMainContainer main;
-
-        private string nodeTitle;
 
         protected int id;
         public int ID
@@ -20,13 +17,11 @@ namespace Dunward.Capricorn
         {
             this.graphView = graphView;
             this.id = id;
-            
-            titleContainer.AddToClassList("capricorn-top-container");
-            titleContainer.Insert(0, new TextField { value = "Node" });
 
+            titleContainer.AddToClassList("capricorn-title-container");
             mainContainer.Insert(1, extensionContainer);
 
-
+            SetupTitleContainer();
             SetPosition(new Rect(x, y, 0, 0));
 
             main = new NodeMainContainer(this);
@@ -56,6 +51,8 @@ namespace Dunward.Capricorn
 
             return mainData;
         }
+
+        protected abstract void SetupTitleContainer();
         
         private void UpdateSubContainers(NodeMainData mainData)
         {
