@@ -7,6 +7,8 @@ namespace Dunward.Capricorn
         public readonly GraphView graphView;
         public readonly NodeMainContainer main;
 
+        protected string customTitle;
+
         protected int id;
         public int ID
         {

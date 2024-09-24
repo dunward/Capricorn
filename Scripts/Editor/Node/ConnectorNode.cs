@@ -24,7 +24,21 @@ namespace Dunward.Capricorn
 
         protected override void SetupTitleContainer()
         {
-            titleContainer.Insert(0, new TextField { value = "Node" });
+            var title = new TextField() { value = $"{id}" };
+            title.RegisterValueChangedCallback(evt =>
+            {
+                customTitle = evt.newValue;
+            });
+            title.RegisterCallback<FocusOutEvent>(evt =>
+            {
+                if (string.IsNullOrEmpty(title.value))
+                {
+                    customTitle = string.Empty;
+                    title.value = $"{id}";
+                }
+            });
+
+            titleContainer.Insert(0, title);
         }
     }
 }
