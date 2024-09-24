@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 
 using UnityEngine;
 
@@ -11,7 +10,7 @@ namespace Dunward.Capricorn
         {
         }
 
-        public override IEnumerator Run()
+        public IEnumerator Run()
         {
             Debug.LogError($"{string.Join(", ", actionData.scripts)}");
             yield return null;

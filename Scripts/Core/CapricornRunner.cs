@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+
 using UnityEngine;
+using UnityEngine.UI;
+
+using Newtonsoft.Json;
+using TMPro;
 
 namespace Dunward.Capricorn
 {
@@ -9,6 +13,14 @@ namespace Dunward.Capricorn
     {
         public TextAsset textAsset;
         private GraphData graphData;
+
+#region Test
+        public TextMeshProUGUI nameTmp;
+        public TextMeshProUGUI subNameTmp;
+        public TextMeshProUGUI scriptTmp;
+
+        public Button inputPanel;
+#endregion
         
         private NodeMainData startNode;
         private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
@@ -32,14 +44,22 @@ namespace Dunward.Capricorn
 
             while (true)
             {
+                inputPanel.onClick.RemoveAllListeners();
                 // TODO: Implement coroutine list here.
+                // ...
+
                 var action = CreateAction(currentNode.actionData);
-                yield return action.Run();
+                switch (action)
+                {
+                    case TextDisplayer textDisplayer:
+                        inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
+                        yield return StartCoroutine(textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp));
+                        break;
+                    case SelectionDisplayer selectionDisplayer:
+                        break;
+                }
 
                 if (currentNode.nodeType == NodeType.Output) yield break;
-
-                // Test delay
-                yield return new WaitForSeconds(1);
                 currentNode = GetNextNode(currentNode);
             }
 
