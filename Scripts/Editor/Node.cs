@@ -7,7 +7,7 @@ namespace Dunward.Capricorn
         public readonly GraphView graphView;
         public readonly NodeMainContainer main;
 
-        private int id;
+        protected int id;
         public int ID
         {
             get => id;
@@ -20,6 +20,7 @@ namespace Dunward.Capricorn
 
             mainContainer.Insert(1, extensionContainer);
             title = $"{id}";
+
             SetPosition(new Rect(x, y, 0, 0));
 
             main = new NodeMainContainer(this);
@@ -37,7 +38,7 @@ namespace Dunward.Capricorn
             UpdateSubContainers(mainData);
         }
 
-        public NodeMainData GetMainData()
+        public virtual NodeMainData GetMainData()
         {
             main.action.SerializeConnections();
 

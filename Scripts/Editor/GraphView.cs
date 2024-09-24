@@ -62,8 +62,17 @@ namespace Dunward.Capricorn
             var data = JsonConvert.DeserializeObject<GraphData>(json);
             foreach (var nodeData in data.nodes)
             {
-                var node = new Node(this, nodeData);
-                AddElement(node);
+                switch (nodeData.nodeType)
+                {
+                    case NodeType.Input:
+                    case NodeType.Output:
+                        break;
+                    case NodeType.Connector:
+                    default:
+                        var node = new ConnectorNode(this, nodeData);
+                        AddElement(node);
+                        break;
+                }
             }
 
             ConnectDeserializeNodes();
