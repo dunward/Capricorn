@@ -9,7 +9,6 @@ namespace Dunward.Capricorn
     {
         public OutputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
-            capabilities &= ~Capabilities.Deletable;
         }
 
         public OutputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
