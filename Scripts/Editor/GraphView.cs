@@ -109,6 +109,7 @@ namespace Dunward.Capricorn
         private void ClearGraph()
         {
             DeleteElements(nodes.ToList());
+            DeleteElements(edges.ToList());
         }
 
         private void AddNode(Vector2 position)
