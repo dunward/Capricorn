@@ -1,17 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 using Newtonsoft.Json;
 using TMPro;
+using System.Collections;
 
 namespace Dunward.Capricorn
 {
-    public class CapricornRunner : MonoBehaviour
+    public class CapricornRunner
     {
-        public TextAsset textAsset;
         private GraphData graphData;
 
 #region Test
@@ -22,29 +22,33 @@ namespace Dunward.Capricorn
         public Button inputPanel;
 #endregion
         
-        private NodeMainData startNode;
+        public readonly NodeMainData startNode;
         private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
 
-        public void Awake()
+        public CapricornRunner(string text)
         {
-            graphData = JsonConvert.DeserializeObject<GraphData>(textAsset.text);
+            graphData = JsonConvert.DeserializeObject<GraphData>(text);
             startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
 
             foreach (var node in graphData.nodes)
             {
                 nodes.Add(node.id, node);
             }
-
-            StartCoroutine(Run());
         }
 
-        public IEnumerator Run()
+        public IEnumerator Run(MonoBehaviour monoBehaviour)
+        {
+            yield return RunTask(monoBehaviour).AsCoroutine();
+        }
+
+        private async Task RunTask(MonoBehaviour monoBehaviour)
         {
             var currentNode = startNode;
 
             while (true)
             {
                 inputPanel.onClick.RemoveAllListeners();
+                
                 // TODO: Implement coroutine list here.
                 // ...
 
@@ -53,16 +57,15 @@ namespace Dunward.Capricorn
                 {
                     case TextDisplayer textDisplayer:
                         inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
-                        yield return StartCoroutine(textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp));
+                        await textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp).AsTask(monoBehaviour);
                         break;
                     case SelectionDisplayer selectionDisplayer:
                         break;
                 }
 
-                if (currentNode.nodeType == NodeType.Output) yield break;
+                if (currentNode.nodeType == NodeType.Output) return;
                 currentNode = GetNextNode(currentNode);
             }
-
         }
 
         private NodeMainData GetNextNode(NodeMainData node)
