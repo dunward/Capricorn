@@ -13,10 +13,13 @@ namespace Dunward.Capricorn
 {
     public class GraphView : UnityEditor.Experimental.GraphView.GraphView
     {
+        private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
         public GraphView()
         {
+            inputNode = new InputNode(this, -1, 100, 200);
+            AddElement(inputNode);
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
@@ -105,7 +108,7 @@ namespace Dunward.Capricorn
 
         private void AddNode(Vector2 position)
         {
-            var node = new Node(this, ++lastNodeID, position);
+            var node = new ConnectorNode(this, ++lastNodeID, position);
             AddElement(node);
         }
 
