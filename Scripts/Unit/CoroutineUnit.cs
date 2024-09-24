@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -8,6 +7,7 @@ namespace Dunward.Capricorn
     public abstract class CoroutineUnit
     {
         protected bool isWaitingUntilFinish;
+#if UNITY_EDITOR
         protected virtual string info => "Coroutine Element";
 
         public virtual void OnGUI(Rect rect, int index, bool isActive, bool isFocused)
@@ -22,6 +22,6 @@ namespace Dunward.Capricorn
         {
             return EditorGUIUtility.singleLineHeight * 2;
         }
+#endif
     }
 }
-#endif
