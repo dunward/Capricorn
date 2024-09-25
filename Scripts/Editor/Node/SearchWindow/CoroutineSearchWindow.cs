@@ -24,19 +24,17 @@ namespace Dunward.Capricorn
             emptyTexture.SetPixel(0, 0, new Color(0, 0, 0, 0));
             emptyTexture.Apply();
 
-
-            var assembly = Assembly.GetAssembly(typeof(CoroutineUnit));
-            var derivedTypes = assembly.GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CoroutineUnit)))
-                .ToList();
-
-
             var entries = new List<SearchTreeEntry>
             {
                 new SearchTreeGroupEntry(new GUIContent("Add Coroutines")),
             };
 
-            foreach (var type in derivedTypes)
+            var assembly = Assembly.GetAssembly(typeof(CoroutineUnit));
+            var types = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CoroutineUnit)))
+                .ToList();
+
+            foreach (var type in types)
             {
                 entries.Add(new SearchTreeEntry(new GUIContent(type.Name, emptyTexture))
                 {
