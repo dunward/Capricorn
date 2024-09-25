@@ -18,7 +18,17 @@
 }
 
 .capricorn-title-container-input {
-    background-color: #FFFFFF;
+    background-color: #6EC207;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+}
+
+.capricorn-title-container-output {
+    background-color: #C40C0C;
+    position: absolute;
+    width: 100%;
+    height: 5px;
 }
 
 .capricorn-title-container > Label {
