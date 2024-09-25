@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using UnityEngine;
 using UnityEngine.UI;
 
 using Newtonsoft.Json;
@@ -11,6 +12,8 @@ namespace Dunward.Capricorn
     public class CapricornRunner
     {
         private GraphData graphData;
+        
+        private MonoBehaviour target;
 
 #region Test
         public TextMeshProUGUI nameTmp;
@@ -23,8 +26,10 @@ namespace Dunward.Capricorn
         public readonly NodeMainData startNode;
         private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
 
-        public CapricornRunner(string text)
+        public CapricornRunner(string text, MonoBehaviour target)
         {
+            this.target = target;
+
             graphData = JsonConvert.DeserializeObject<GraphData>(text);
             startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
 
