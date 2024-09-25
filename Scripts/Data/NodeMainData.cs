@@ -15,7 +15,7 @@ namespace Dunward.Capricorn
     {
         None,
         Input,
+        Connector,
         Output,
-        Connector
     }
 }

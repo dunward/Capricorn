@@ -117,7 +117,6 @@ namespace Dunward.Capricorn
             var menu = ScriptableObject.CreateInstance<NodeSearchWindow>();
             menu.onSelectNode = (type) => 
             {
-                // create node type
                 var node = (BaseNode)System.Activator.CreateInstance(type, this, ++lastNodeID, action.eventInfo.mousePosition);
                 AddElement(node);
             };
