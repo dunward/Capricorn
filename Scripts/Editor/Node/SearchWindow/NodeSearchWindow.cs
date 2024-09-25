@@ -10,7 +10,7 @@ namespace Dunward.Capricorn
 {
     public class NodeSearchWindow : ScriptableObject, ISearchWindowProvider
     {
-        public Action<Type> onSelectNode;
+        public Action<Type, Vector2> onSelectNode;
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
@@ -35,7 +35,8 @@ namespace Dunward.Capricorn
 
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            onSelectNode?.Invoke(SearchTreeEntry.userData as Type);
+            var position = context.screenMousePosition;
+            onSelectNode?.Invoke(SearchTreeEntry.userData as Type, position);
             return true;
         }
     }
