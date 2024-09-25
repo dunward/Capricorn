@@ -13,20 +13,35 @@ namespace Dunward.Capricorn
 {
     public class GraphView : UnityEditor.Experimental.GraphView.GraphView
     {
+        private NodeSearchWindow nodeSearchWindow;
+
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
         public GraphView()
         {
+            if (nodeSearchWindow == null)
+                nodeSearchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+
+            nodeSearchWindow.onSelectNode = (type, position) => 
+            {
+                var localPosition = contentViewContainer.WorldToLocal(position);
+                var node = (BaseNode)System.Activator.CreateInstance(type, this, ++lastNodeID, localPosition);
+                AddElement(node);
+            };
+
             inputNode = new InputNode(this, -1, 100, 200);
             AddElement(inputNode);
+
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
             this.AddManipulator(new DragAndDropManipulator(data => Load(data)));
-            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node", action => AddNode(action.eventInfo.localMousePosition), DropdownMenuAction.AlwaysEnabled)));
+            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node",
+                                    (action) => SearchWindow.Open(new SearchWindowContext(action.eventInfo.mousePosition), nodeSearchWindow),
+                                    DropdownMenuAction.AlwaysEnabled)));
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -91,11 +106,11 @@ namespace Dunward.Capricorn
         {
             foreach (var node in nodes)
             {
-                var cn = node as BaseNode;
-                for (int i = 0; i < cn.main.action.data.connections.Count; i++)
+                var baseNode = node as BaseNode;
+                for (int i = 0; i < baseNode.main.action.data.connections.Count; i++)
                 {
-                    var connection = cn.main.action.data.connections[i];
-                    var outputPort = cn.outputContainer[i] as Port;
+                    var connection = baseNode.main.action.data.connections[i];
+                    var outputPort = baseNode.outputContainer[i] as Port;
                     var inputPort = nodes.Where(n => n is BaseNode)
                                         .Cast<BaseNode>()
                                         .First(n => n.ID == connection).inputContainer[0] as Port;
@@ -110,12 +125,6 @@ namespace Dunward.Capricorn
         {
             DeleteElements(nodes.ToList());
             DeleteElements(edges.ToList());
-        }
-
-        private void AddNode(Vector2 position)
-        {
-            var node = new ConnectorNode(this, ++lastNodeID, position);
-            AddElement(node);
         }
 
         private class DragAndDropManipulator : PointerManipulator

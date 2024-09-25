@@ -6,19 +6,27 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEditor.Experimental.GraphView;
-using System.Reflection;
-using System.Linq;
 
 namespace Dunward.Capricorn
 {
     public class NodeCoroutineContainer
     {
+        private List<CoroutineUnit> coroutines = new List<CoroutineUnit>();
         private bool foldout = true;
+
+        public NodeCoroutineData CoroutineData
+        {
+            get
+            {
+                var data = new NodeCoroutineData();
+                data.coroutines = coroutines;
+                return data;
+            }
+        }
 
         public NodeCoroutineContainer(NodeMainContainer main)
         {
-            var elements = new List<CoroutineUnit>();
-            var coroutineList = new ReorderableList(elements, typeof(string), true, false, true, true);
+            var coroutineList = new ReorderableList(coroutines, typeof(string), true, false, true, true);
             var container = new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
@@ -31,32 +39,25 @@ namespace Dunward.Capricorn
 
             coroutineList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                var element = elements[index];
+                var element = coroutines[index];
                 element.OnGUI(rect, index, isActive, isFocused);
             };
 
             coroutineList.elementHeightCallback = (int index) =>
             {
-                var element = elements[index];
+                var element = coroutines[index];
                 return element.GetHeight();
             };
 
             coroutineList.onAddCallback = (ReorderableList l) =>
             {
                 var menu = ScriptableObject.CreateInstance<CoroutineSearchWindow>();
-                var assembly = Assembly.GetAssembly(typeof(CoroutineUnit));
-                var derivedTypes = assembly.GetTypes()
-                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CoroutineUnit)))
-                    .ToList();
-
-                foreach (var type in derivedTypes)
-                {
-                    Debug.LogError(type);
-                }
+                menu.Initialize(l);
 
                 var current = Event.current.mousePosition;
-                current.y += 130; // Unity default search window height 320 and header height 30. So, 320 / 2 - 30 = 130
-                SearchWindow.Open(new SearchWindowContext(container.ChangeCoordinatesTo(main.graphView, current)), menu);
+                var calc = container.ChangeCoordinatesTo(main.graphView, current);
+                calc.y += 160; // Unity default search window height 320.
+                SearchWindow.Open(new SearchWindowContext(calc), menu);
             };
             
             main.coroutineContainer.Add(container);

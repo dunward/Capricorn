@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Dunward.Capricorn
 {
@@ -17,15 +18,12 @@ namespace Dunward.Capricorn
         public OutputNode(GraphView graphView, NodeMainData mainData) : base(graphView, mainData)
         {
         }
-
-        private void UpdateSubContainers(NodeMainData mainData)
-        {
-            main.action.DeserializeConnections(mainData.actionData);
-        }
-
+        
         protected override void SetupTitleContainer()
         {
-            titleContainer.style.backgroundColor = CapricornColors.OutputTitleHeader;
+            var topHeader = new VisualElement();
+            topHeader.AddToClassList("capricorn-title-container-output");
+            titleContainer.Add(topHeader);
             title = "Output";
         }
     }

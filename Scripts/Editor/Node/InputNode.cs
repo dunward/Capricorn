@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 
 namespace Dunward.Capricorn
@@ -20,14 +21,11 @@ namespace Dunward.Capricorn
         {
         }
 
-        private void UpdateSubContainers(NodeMainData mainData)
-        {
-            main.action.DeserializeConnections(mainData.actionData);
-        }
-
         protected override void SetupTitleContainer()
         {
-            titleContainer.style.backgroundColor = CapricornColors.InputTitleHeader;
+            var topHeader = new VisualElement();
+            topHeader.AddToClassList("capricorn-title-container-input");
+            titleContainer.Add(topHeader);
             title = "Input";
         }
     }
