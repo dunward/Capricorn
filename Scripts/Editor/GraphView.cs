@@ -26,7 +26,7 @@ namespace Dunward.Capricorn
             this.AddManipulator(new RectangleSelector());
 
             this.AddManipulator(new DragAndDropManipulator(data => Load(data)));
-            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node", action => AddNode(action.eventInfo.localMousePosition), DropdownMenuAction.AlwaysEnabled)));
+            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node", OnClickAddNode, DropdownMenuAction.AlwaysEnabled)));
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -91,11 +91,11 @@ namespace Dunward.Capricorn
         {
             foreach (var node in nodes)
             {
-                var cn = node as BaseNode;
-                for (int i = 0; i < cn.main.action.data.connections.Count; i++)
+                var baseNode = node as BaseNode;
+                for (int i = 0; i < baseNode.main.action.data.connections.Count; i++)
                 {
-                    var connection = cn.main.action.data.connections[i];
-                    var outputPort = cn.outputContainer[i] as Port;
+                    var connection = baseNode.main.action.data.connections[i];
+                    var outputPort = baseNode.outputContainer[i] as Port;
                     var inputPort = nodes.Where(n => n is BaseNode)
                                         .Cast<BaseNode>()
                                         .First(n => n.ID == connection).inputContainer[0] as Port;
@@ -112,10 +112,17 @@ namespace Dunward.Capricorn
             DeleteElements(edges.ToList());
         }
 
-        private void AddNode(Vector2 position)
+        private void OnClickAddNode(DropdownMenuAction action)
         {
-            var node = new ConnectorNode(this, ++lastNodeID, position);
-            AddElement(node);
+            var menu = ScriptableObject.CreateInstance<NodeSearchWindow>();
+            menu.onSelectNode = (type) => 
+            {
+                // create node type
+                var node = (BaseNode)System.Activator.CreateInstance(type, this, ++lastNodeID, action.eventInfo.mousePosition);
+                AddElement(node);
+            };
+
+            SearchWindow.Open(new SearchWindowContext(action.eventInfo.mousePosition), menu);
         }
 
         private class DragAndDropManipulator : PointerManipulator
