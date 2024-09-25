@@ -11,12 +11,22 @@ namespace Dunward.Capricorn
 {
     public class NodeCoroutineContainer
     {
+        private List<CoroutineUnit> coroutines = new List<CoroutineUnit>();
         private bool foldout = true;
+
+        public NodeCoroutineData CoroutineData
+        {
+            get
+            {
+                var data = new NodeCoroutineData();
+                data.coroutines = coroutines;
+                return data;
+            }
+        }
 
         public NodeCoroutineContainer(NodeMainContainer main)
         {
-            var elements = new List<CoroutineUnit>();
-            var coroutineList = new ReorderableList(elements, typeof(string), true, false, true, true);
+            var coroutineList = new ReorderableList(coroutines, typeof(string), true, false, true, true);
             var container = new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
@@ -29,13 +39,13 @@ namespace Dunward.Capricorn
 
             coroutineList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
             {
-                var element = elements[index];
+                var element = coroutines[index];
                 element.OnGUI(rect, index, isActive, isFocused);
             };
 
             coroutineList.elementHeightCallback = (int index) =>
             {
-                var element = elements[index];
+                var element = coroutines[index];
                 return element.GetHeight();
             };
 

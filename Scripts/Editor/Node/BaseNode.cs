@@ -56,6 +56,7 @@ namespace Dunward.Capricorn
             mainData.x = GetPosition().x;
             mainData.y = GetPosition().y;
             mainData.nodeType = nodeType;
+            mainData.coroutineData = main.coroutine.CoroutineData;
             mainData.actionData = main.action.data;
 
             return mainData;

@@ -8,6 +8,7 @@ namespace Dunward.Capricorn
         public float x;
         public float y;
         public NodeType nodeType;
+        public NodeCoroutineData coroutineData;
         public NodeActionData actionData;
     }
 
