@@ -1,13 +1,13 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEditor.Experimental.GraphView;
-using System.Reflection;
-using System.Linq;
 
 namespace Dunward.Capricorn
 {
@@ -55,8 +55,9 @@ namespace Dunward.Capricorn
                 }
 
                 var current = Event.current.mousePosition;
-                current.y += 130; // Unity default search window height 320 and header height 30. So, 320 / 2 - 30 = 130
-                SearchWindow.Open(new SearchWindowContext(container.ChangeCoordinatesTo(main.graphView, current)), menu);
+                var calc = container.ChangeCoordinatesTo(main.graphView, current);
+                calc.y += 160; // Unity default search window height 320.
+                SearchWindow.Open(new SearchWindowContext(calc), menu);
             };
             
             main.coroutineContainer.Add(container);
