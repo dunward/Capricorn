@@ -2,9 +2,9 @@
 namespace Dunward.Capricorn
 {
     [System.Serializable]
-    public class CapricornCoroutinePlayMusic : CoroutineUnit
+    public class PlayMusicUnit : CoroutineUnit
     {
-
+        protected override string info => "Play Music";
     }
 }
 #endif

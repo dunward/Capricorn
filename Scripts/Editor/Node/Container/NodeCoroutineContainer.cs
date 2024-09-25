@@ -1,7 +1,5 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -44,15 +42,7 @@ namespace Dunward.Capricorn
             coroutineList.onAddCallback = (ReorderableList l) =>
             {
                 var menu = ScriptableObject.CreateInstance<CoroutineSearchWindow>();
-                var assembly = Assembly.GetAssembly(typeof(CoroutineUnit));
-                var derivedTypes = assembly.GetTypes()
-                    .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CoroutineUnit)))
-                    .ToList();
-
-                foreach (var type in derivedTypes)
-                {
-                    Debug.LogError(type);
-                }
+                menu.Initialize(l);
 
                 var current = Event.current.mousePosition;
                 var calc = container.ChangeCoordinatesTo(main.graphView, current);
