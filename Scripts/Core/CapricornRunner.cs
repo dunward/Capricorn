@@ -9,51 +9,44 @@ using TMPro;
 
 namespace Dunward.Capricorn
 {
-    public class CapricornRunner
+    public partial class CapricornRunner
     {
-        private GraphData graphData;
+        internal GraphData graphData;
         
-        private MonoBehaviour target;
-        private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
-
-#region Test
-        public TextMeshProUGUI nameTmp;
-        public TextMeshProUGUI subNameTmp;
-        public TextMeshProUGUI scriptTmp;
-
-        public Button inputPanel;
-#endregion
+        internal MonoBehaviour target;
+        internal Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
         
         public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
         public event CoroutineDelegate AddCustomCoroutines;
 
 
-        public readonly NodeMainData startNode;
-
-        public CapricornRunner(string text, MonoBehaviour target)
+        public NodeMainData StartNode
         {
-            this.target = target;
-
-            graphData = JsonConvert.DeserializeObject<GraphData>(text, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
-            startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
-
-            foreach (var node in graphData.nodes)
-            {
-                nodes.Add(node.id, node);
-            }
+            get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
         }
+
+        // public CapricornRunner(string text, MonoBehaviour target)
+        // {
+        //     this.target = target;
+
+        //     graphData = JsonConvert.DeserializeObject<GraphData>(text, new JsonSerializerSettings
+        //     {
+        //         TypeNameHandling = TypeNameHandling.Auto
+        //     });
+        //     startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
+
+        //     foreach (var node in graphData.nodes)
+        //     {
+        //         nodes.Add(node.id, node);
+        //     }
+        // }
 
         public IEnumerator Run()
         {
-            var currentNode = startNode;
+            var currentNode = StartNode;
 
             while (true)
             {
-                inputPanel.onClick.RemoveAllListeners();
-
                 yield return RunCoroutine(currentNode.coroutineData, target);
 
                 var action = CreateAction(currentNode.actionData);
@@ -100,8 +93,7 @@ namespace Dunward.Capricorn
             switch (action)
             {
                 case TextDisplayer textDisplayer:
-                    inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
-                    yield return textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp);
+                    yield return textDisplayer.Execute(nameTarget, subNameTarget, scriptTarget);
                     break;
                 case SelectionDisplayer selectionDisplayer:
                     break;

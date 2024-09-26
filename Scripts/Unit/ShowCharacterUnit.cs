@@ -18,6 +18,8 @@ namespace Dunward.Capricorn
 
         public override IEnumerator Execute(params object[] args)
         {
+            var obj = args[0] as GameObject;
+            Debug.LogError(obj.name);
             yield return new WaitForSeconds(elapsedTime);
         }
     }
