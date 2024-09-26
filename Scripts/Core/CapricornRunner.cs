@@ -1,45 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using UnityEngine;
-using UnityEngine.UI;
-
-using Newtonsoft.Json;
-using TMPro;
-
 namespace Dunward.Capricorn
 {
     public partial class CapricornRunner
     {
         internal GraphData graphData;
         
-        internal MonoBehaviour target;
+        internal UnityEngine.MonoBehaviour target;
         internal Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
         
-        public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
+        public System.Action onInteraction;
         public event CoroutineDelegate AddCustomCoroutines;
+        public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
 
 
         public NodeMainData StartNode
         {
             get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
         }
-
-        // public CapricornRunner(string text, MonoBehaviour target)
-        // {
-        //     this.target = target;
-
-        //     graphData = JsonConvert.DeserializeObject<GraphData>(text, new JsonSerializerSettings
-        //     {
-        //         TypeNameHandling = TypeNameHandling.Auto
-        //     });
-        //     startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
-
-        //     foreach (var node in graphData.nodes)
-        //     {
-        //         nodes.Add(node.id, node);
-        //     }
-        // }
 
         public IEnumerator Run()
         {
@@ -57,9 +36,7 @@ namespace Dunward.Capricorn
             }
         }
 
-        public System.Action onInteraction;
-
-        private IEnumerator RunCoroutine(NodeCoroutineData data, MonoBehaviour target)
+        private IEnumerator RunCoroutine(NodeCoroutineData data, UnityEngine.MonoBehaviour target)
         {
             foreach (var coroutine in data.coroutines)
             {
