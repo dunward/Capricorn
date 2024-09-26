@@ -1,3 +1,5 @@
+using UnityEngine.UI;
+
 using TMPro;
 
 namespace Dunward.Capricorn
@@ -11,7 +13,7 @@ namespace Dunward.Capricorn
                 case TMP_Text tmpText:
                     tmpText.text = text;
                     break;
-                case UnityEngine.UI.Text uiText:
+                case Text uiText:
                     uiText.text = text;
                     break;
                 default:
@@ -26,7 +28,7 @@ namespace Dunward.Capricorn
                 case TMP_Text tmpText:
                     tmpText.text += text;
                     break;
-                case UnityEngine.UI.Text uiText:
+                case Text uiText:
                     uiText.text += text;
                     break;
                 default:
@@ -40,7 +42,7 @@ namespace Dunward.Capricorn
             {
                 case TMP_Text tmpText:
                     return tmpText.text;
-                case UnityEngine.UI.Text uiText:
+                case Text uiText:
                     return uiText.text;
                 default:
                     throw new System.Exception("TextUtils.GetText() is not implemented for this type.");
