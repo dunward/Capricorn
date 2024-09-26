@@ -7,10 +7,14 @@ namespace Dunward.Capricorn
 {
     public class InputNode : BaseNode
     {
-        public InputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
+        public InputNode() : base()
         {
             nodeType = NodeType.Input;
             capabilities &= ~Capabilities.Deletable;
+        }
+
+        public InputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
+        {
         }
 
         public InputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
