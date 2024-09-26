@@ -15,6 +15,8 @@ namespace Dunward.Capricorn
     {
         private NodeSearchWindow nodeSearchWindow;
 
+        private string filePath;
+
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
@@ -79,10 +81,11 @@ namespace Dunward.Capricorn
             return JsonConvert.SerializeObject(data, settings);
         }
 
-        public void Load(string json)
+        public void Load(string path)
         {
             ClearGraph();
 
+            var json = System.IO.File.ReadAllText(path);
             var data = JsonConvert.DeserializeObject<GraphData>(json, settings);
             foreach (var nodeData in data.nodes)
             {
@@ -176,9 +179,10 @@ namespace Dunward.Capricorn
 
             private void OnDragPerform(DragPerformEvent _)
             {
-                var textAsset = item as TextAsset;
                 EditorUtility.DisplayProgressBar("Capricorn", "Load Graph...", 0.112f);
-                onLoadGraph?.Invoke(textAsset.text);
+                var textAsset = item as TextAsset;
+                var path = AssetDatabase.GetAssetPath(textAsset);
+                onLoadGraph?.Invoke(path);
                 EditorUtility.ClearProgressBar();
             }
 

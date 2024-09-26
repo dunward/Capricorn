@@ -38,7 +38,7 @@ namespace Dunward.Capricorn
             {
                 if (EditorUtility.OpenFilePanel("Load Graph", "", "json") is string path)
                 {
-                    Debug.LogError(path);
+                    graphView.Load(path);
                 }
             }
 
