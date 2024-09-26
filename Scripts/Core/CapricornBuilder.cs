@@ -55,6 +55,13 @@ namespace Dunward.Capricorn
             return this;
         }
 
+        public CapricornBuilder SetInteraction(UnityEngine.Events.UnityEvent evt)
+        {
+            evt.AddListener(() => runner.onInteraction?.Invoke());
+
+            return this;
+        }
+
         public CapricornRunner Build(MonoBehaviour target)
         {
             if (!isNameTargetsSet)

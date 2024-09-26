@@ -57,6 +57,8 @@ namespace Dunward.Capricorn
             }
         }
 
+        public System.Action onInteraction;
+
         private IEnumerator RunCoroutine(NodeCoroutineData data, MonoBehaviour target)
         {
             foreach (var coroutine in data.coroutines)
@@ -80,9 +82,12 @@ namespace Dunward.Capricorn
                     yield return waitUnit.Execute();
                     break;
                 default:
-                    foreach (CoroutineDelegate coroutine in AddCustomCoroutines.GetInvocationList())
+                    if (AddCustomCoroutines != null)
                     {
-                        yield return coroutine(unit);
+                        foreach (CoroutineDelegate coroutine in AddCustomCoroutines.GetInvocationList())
+                        {
+                            yield return coroutine(unit);
+                        }
                     }
                     break;
             }
@@ -93,11 +98,14 @@ namespace Dunward.Capricorn
             switch (action)
             {
                 case TextDisplayer textDisplayer:
+                    onInteraction += textDisplayer.Interaction;
                     yield return textDisplayer.Execute(nameTarget, subNameTarget, scriptTarget);
                     break;
                 case SelectionDisplayer selectionDisplayer:
                     break;
             }
+
+            onInteraction = null;
         }
 
         private NodeMainData GetNextNode(NodeMainData node)
