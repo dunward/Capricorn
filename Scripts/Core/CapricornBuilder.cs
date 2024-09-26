@@ -79,6 +79,8 @@ namespace Dunward.Capricorn
         {
             if (!isNameTargetsSet)
                 throw new InvalidOperationException("Name targets are not set.");
+            if (!isCharacterAreaSet)
+                throw new InvalidOperationException("Character area is not set.");
 
             runner.target = target;
 
