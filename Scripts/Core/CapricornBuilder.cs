@@ -1,7 +1,9 @@
 using System;
-using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
+
 using UnityEngine;
+
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Dunward.Capricorn
 {
@@ -10,6 +12,7 @@ namespace Dunward.Capricorn
         private CapricornRunner runner;
 
         private bool isNameTargetsSet = false;
+        private bool isCharacterAreaSet = false;
 
         private CapricornBuilder()
         {
@@ -51,6 +54,16 @@ namespace Dunward.Capricorn
             runner.scriptTarget = scriptTarget;
 
             isNameTargetsSet = true;
+
+            return this;
+        }
+
+        public CapricornBuilder SetCharacterArea(List<NovelManager.Character> test, Transform characterArea)
+        {
+            runner.characters = test;
+            runner.characterArea = characterArea;
+
+            isCharacterAreaSet = true;
 
             return this;
         }

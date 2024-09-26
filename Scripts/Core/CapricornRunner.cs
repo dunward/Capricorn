@@ -57,6 +57,9 @@ namespace Dunward.Capricorn
                 case WaitUnit waitUnit:
                     yield return waitUnit.Execute();
                     break;
+                case ShowCharacterUnit showCharacterUnit:
+                    yield return showCharacterUnit.Execute(characters, characterArea);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
+
 using UnityEngine;
 
 namespace Dunward.Capricorn
@@ -9,6 +10,11 @@ namespace Dunward.Capricorn
     public class ShowCharacterUnit : FadeUnit
     {
         public string character;
+
+        public CapricornVector2 position;
+
+        public float scale = 1;
+
 #if UNITY_EDITOR
         protected override string info => "Show Character";
 
@@ -16,25 +22,28 @@ namespace Dunward.Capricorn
         {
             base.OnGUI(rect, ref height);
 
-            if (EditorGUI.DropdownButton(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), new GUIContent(character), FocusType.Passive))
+            if (UnityEditor.EditorGUI.DropdownButton(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), new GUIContent(character), FocusType.Passive))
             {
                 ShowCharacterPopup(rect);
             }
-            // if (GUI.Button(new Rect(rect.x, rect.y + height, rect.width, height), "Select Character"))
-            // {
-            //     ShowCharacterPopup(rect);
-            // }
-            // // test string to enums
-            // // enum change
-            // EditorGUI.EnumPopup(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Character", 0);
+
+            height += UnityEditor.EditorGUIUtility.singleLineHeight;
+
+            position = UnityEditor.EditorGUI.Vector2Field(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight * 2), "Position", position);
+
+            height += UnityEditor.EditorGUIUtility.singleLineHeight * 2;
+
+            scale = Mathf.Clamp(UnityEditor.EditorGUI.FloatField(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Scale", scale), 0, float.MaxValue);
+
+            height += UnityEditor.EditorGUIUtility.singleLineHeight;
         }
 
         private void ShowCharacterPopup(Rect rect)
         {
-            GenericMenu menu = new GenericMenu();
-                var characters = new List<string> { "Character 1", "Character 2", "Character 3" };
+            UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
+            var characters = new List<string> { "arona", "hosino", "ako" };
 
-            foreach (var c in characters)
+            foreach (var c in characters.OrderBy(c => c))
             {
                 menu.AddItem(new GUIContent(c), c == character, OnCharacterSelected, c);
             }
@@ -42,22 +51,56 @@ namespace Dunward.Capricorn
             menu.DropDown(rect);
         }
 
-        private void OnCharacterSelected(object c)
+        private void OnCharacterSelected(object select)
         {
-            character = c as string;
+            character = select as string;
         }
 
         public override float GetHeight()
         {
-            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight;
+            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight * 4;
         }
 #endif
 
         public override IEnumerator Execute(params object[] args)
         {
-            var obj = args[0] as GameObject;
-            Debug.LogError(obj.name);
-            yield return new WaitForSeconds(elapsedTime);
+            var chars = args[0] as List<NovelManager.Character>;
+            var prefab = chars.Find(c => c.name == character).prefab;
+            var parent = args[1] as Transform;
+
+            var go = Object.Instantiate(prefab, parent);
+
+            if (go.transform is RectTransform)
+            {
+                var rt = go.transform as RectTransform;
+                rt.anchoredPosition = position;
+                rt.localScale = new Vector3(scale, scale, 1);
+            }
+            else
+            {
+                go.transform.position = position;
+                go.transform.localScale = new Vector3(scale, scale, 1);
+            }
+            
+            var time = 0f;
+            var image = go.GetComponent<UnityEngine.UI.Image>();
+            var sprite = go.GetComponent<SpriteRenderer>();
+
+            while (fade && time < elapsedTime)
+            {
+                time += Time.deltaTime;
+
+                if (image != null)
+                {
+                    image.color = Color.Lerp(Color.black, Color.white, time / elapsedTime);
+                }
+                else if (sprite != null)
+                {
+                    sprite.color = Color.Lerp(Color.black, Color.white, time / elapsedTime);
+                }
+
+                yield return null;
+            }
         }
     }
 }
