@@ -22,9 +22,10 @@ namespace Dunward.Capricorn
         {
             base.OnGUI(rect, ref height);
 
-            if (UnityEditor.EditorGUI.DropdownButton(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), new GUIContent(character), FocusType.Passive))
+            var dropDownRect = new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight);
+            if (UnityEditor.EditorGUI.DropdownButton(dropDownRect, new GUIContent(character), FocusType.Passive))
             {
-                ShowCharacterPopup(rect);
+                ShowCharacterPopup(dropDownRect);
             }
 
             height += UnityEditor.EditorGUIUtility.singleLineHeight;
