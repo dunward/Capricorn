@@ -14,7 +14,6 @@ namespace Dunward.Capricorn
         public event CoroutineDelegate AddCustomCoroutines;
         public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
 
-
         public NodeMainData StartNode
         {
             get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);

@@ -10,7 +10,7 @@ namespace Dunward.Capricorn
 #if UNITY_EDITOR
         protected override string info => "Coroutine Element";
 
-        public override void OnGUI(Rect rect, float height)
+        public override void OnGUI(Rect rect, ref float height)
         {
             fade = UnityEditor.EditorGUI.Toggle(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Fade", fade);
             height += UnityEditor.EditorGUIUtility.singleLineHeight;
@@ -19,6 +19,7 @@ namespace Dunward.Capricorn
             {
                 elapsedTime = Mathf.Clamp(UnityEditor.EditorGUI.FloatField(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Elapsed Time", elapsedTime),
                     0, float.MaxValue);
+                height += UnityEditor.EditorGUIUtility.singleLineHeight;
             }
         }
 

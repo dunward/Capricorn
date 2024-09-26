@@ -10,9 +10,9 @@ namespace Dunward.Capricorn
 #if UNITY_EDITOR
         protected override string info => "Play Music";
 
-        public override void OnGUI(Rect rect, float height)
+        public override void OnGUI(Rect rect, ref float height)
         {
-            base.OnGUI(rect, height);
+            base.OnGUI(rect, ref height);
         }
 #endif
 
