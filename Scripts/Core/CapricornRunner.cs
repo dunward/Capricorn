@@ -14,6 +14,7 @@ namespace Dunward.Capricorn
         private GraphData graphData;
         
         private MonoBehaviour target;
+        private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
 
 #region Test
         public TextMeshProUGUI nameTmp;
@@ -23,8 +24,11 @@ namespace Dunward.Capricorn
         public Button inputPanel;
 #endregion
         
+        public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
+        public event CoroutineDelegate AddCustomCoroutines;
+
+
         public readonly NodeMainData startNode;
-        private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
 
         public CapricornRunner(string text, MonoBehaviour target)
         {
@@ -66,12 +70,28 @@ namespace Dunward.Capricorn
             {
                 if (coroutine.isWaitingUntilFinish)
                 {
-                    yield return target.StartCoroutine(coroutine.Execute());
+                    yield return target.StartCoroutine(ExecuteCoroutine(coroutine));
                 }
                 else
                 {
-                    target.StartCoroutine(coroutine.Execute());
+                    target.StartCoroutine(ExecuteCoroutine(coroutine));
                 }
+            }
+        }
+
+        private IEnumerator ExecuteCoroutine(CoroutineUnit unit)
+        {
+            switch (unit)
+            {
+                case WaitUnit waitUnit:
+                    yield return waitUnit.Execute();
+                    break;
+                default:
+                    foreach (CoroutineDelegate coroutine in AddCustomCoroutines.GetInvocationList())
+                    {
+                        yield return coroutine(unit);
+                    }
+                    break;
             }
         }
 
