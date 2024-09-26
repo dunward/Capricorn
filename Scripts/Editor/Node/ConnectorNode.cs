@@ -8,13 +8,9 @@ namespace Dunward.Capricorn
     {
         private TextField customField;
 
-        public ConnectorNode() : base()
-        {
-            nodeType = NodeType.Connector;
-        }
-
         public ConnectorNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
+            nodeType = NodeType.Connector;
         }
 
         public ConnectorNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)

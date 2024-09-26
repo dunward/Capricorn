@@ -6,13 +6,9 @@ namespace Dunward.Capricorn
 {
     public class OutputNode : BaseNode
     {
-        public OutputNode() : base()
-        {
-            nodeType = NodeType.Output;
-        }
-
         public OutputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
+            nodeType = NodeType.Output;
         }
 
         public OutputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)

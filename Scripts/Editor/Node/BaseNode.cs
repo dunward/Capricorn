@@ -18,23 +18,20 @@ namespace Dunward.Capricorn
             get => id;
         }
 
-        public BaseNode()
-        {
-            titleContainer.AddToClassList("capricorn-title-container");
-            mainContainer.Insert(1, extensionContainer);
-
-            main = new NodeMainContainer(this);
-
-            SetupTitleContainer();
-            RefreshExpandedState();
-        }
-
-        public BaseNode(GraphView graphView, int id, float x, float y) : this()
+        public BaseNode(GraphView graphView, int id, float x, float y)
         {
             this.graphView = graphView;
             this.id = id;
 
+            titleContainer.AddToClassList("capricorn-title-container");
+            mainContainer.Insert(1, extensionContainer);
+
+            SetupTitleContainer();
             SetPosition(new Rect(x, y, 0, 0));
+
+            main = new NodeMainContainer(this);
+
+            RefreshExpandedState();
         }
 
         public BaseNode(GraphView graphView, int id, Vector2 mousePosition) : this(graphView, id, mousePosition.x, mousePosition.y)
