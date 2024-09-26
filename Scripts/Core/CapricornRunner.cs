@@ -30,7 +30,10 @@ namespace Dunward.Capricorn
         {
             this.target = target;
 
-            graphData = JsonConvert.DeserializeObject<GraphData>(text);
+            graphData = JsonConvert.DeserializeObject<GraphData>(text, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
             startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
 
             foreach (var node in graphData.nodes)
@@ -46,23 +49,42 @@ namespace Dunward.Capricorn
             while (true)
             {
                 inputPanel.onClick.RemoveAllListeners();
-                
-                // TODO: Implement coroutine list here.
-                // ...
+
+                yield return RunCoroutine(currentNode.coroutineData, target);
 
                 var action = CreateAction(currentNode.actionData);
-                switch (action)
-                {
-                    case TextDisplayer textDisplayer:
-                        inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
-                        yield return textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp);
-                        break;
-                    case SelectionDisplayer selectionDisplayer:
-                        break;
-                }
+                yield return RunAction(action);
 
                 if (currentNode.nodeType == NodeType.Output) yield break;
                 currentNode = GetNextNode(currentNode);
+            }
+        }
+
+        private IEnumerator RunCoroutine(NodeCoroutineData data, MonoBehaviour target)
+        {
+            foreach (var coroutine in data.coroutines)
+            {
+                if (coroutine.isWaitingUntilFinish)
+                {
+                    yield return target.StartCoroutine(coroutine.Execute());
+                }
+                else
+                {
+                    target.StartCoroutine(coroutine.Execute());
+                }
+            }
+        }
+
+        private IEnumerator RunAction(ActionPlayer action)
+        {
+            switch (action)
+            {
+                case TextDisplayer textDisplayer:
+                    inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
+                    yield return textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp);
+                    break;
+                case SelectionDisplayer selectionDisplayer:
+                    break;
             }
         }
 

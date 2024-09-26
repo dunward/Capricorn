@@ -1,3 +1,5 @@
+using System.Collections;
+
 using UnityEngine;
 
 namespace Dunward.Capricorn
@@ -14,7 +16,7 @@ namespace Dunward.Capricorn
         {
             var singleHeight = UnityEditor.EditorGUIUtility.singleLineHeight;
             var height = 0f;
-            UnityEditor.EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, singleHeight), info);
+            UnityEditor.EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, singleHeight), info, UnityEditor.EditorStyles.boldLabel);
             height += singleHeight;
             isWaitingUntilFinish = UnityEditor.EditorGUI.Toggle(new Rect(rect.x, rect.y + height, rect.width, singleHeight), "Waiting Until Finish", isWaitingUntilFinish);
             height += singleHeight;
@@ -28,5 +30,7 @@ namespace Dunward.Capricorn
             return UnityEditor.EditorGUIUtility.singleLineHeight * 2;
         }
 #endif
+
+        public abstract IEnumerator Execute(params object[] args);
     }
 }

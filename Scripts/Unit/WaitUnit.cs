@@ -1,3 +1,5 @@
+using System.Collections;
+
 using UnityEngine;
 
 namespace Dunward.Capricorn
@@ -21,5 +23,10 @@ namespace Dunward.Capricorn
             return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight;
         }
 #endif
+
+        public override IEnumerator Execute(params object[] args)
+        {
+            yield return new WaitForSeconds(time);
+        }
     }
 }
