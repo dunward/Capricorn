@@ -62,6 +62,7 @@ namespace Dunward.Capricorn
             return mainData;
         }
 
+        protected abstract void Initialize();
         protected abstract void SetupTitleContainer();
 
         protected virtual void Repaint()
@@ -71,6 +72,7 @@ namespace Dunward.Capricorn
 
         private void UpdateSubContainers(NodeMainData mainData)
         {
+            main.coroutine.DeserializeCoroutines(mainData.coroutineData);
             main.action.DeserializeConnections(mainData.actionData);
         }
     }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
+using Codice.CM.Interfaces;
 
 namespace Dunward.Capricorn
 {
@@ -9,16 +10,23 @@ namespace Dunward.Capricorn
     {
         public InputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
-            nodeType = NodeType.Input;
-            capabilities &= ~Capabilities.Deletable;
+            Initialize();
         }
 
         public InputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
         {
+            Initialize();
         }
 
         public InputNode(GraphView graphView, NodeMainData mainData) : base(graphView, mainData)
         {
+            Initialize();
+        }
+
+        protected override void Initialize()
+        {
+            nodeType = NodeType.Input;
+            capabilities &= ~Capabilities.Deletable;
         }
 
         protected override void SetupTitleContainer()

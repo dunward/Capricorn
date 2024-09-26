@@ -5,13 +5,7 @@ namespace Dunward.Capricorn
     [System.Serializable]
     public abstract class CoroutineUnit
     {
-        public string type;
         public bool isWaitingUntilFinish;
-
-        public CoroutineUnit()
-        {
-            type = GetType().Name;
-        }
 
 #if UNITY_EDITOR
         protected virtual string info => "Coroutine Element";

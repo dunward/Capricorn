@@ -6,11 +6,14 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEditor.Experimental.GraphView;
+using System;
 
 namespace Dunward.Capricorn
 {
     public class NodeCoroutineContainer
     {
+        private ReorderableList coroutineList;
+
         private List<CoroutineUnit> coroutines = new List<CoroutineUnit>();
         private bool foldout = true;
 
@@ -26,7 +29,7 @@ namespace Dunward.Capricorn
 
         public NodeCoroutineContainer(NodeMainContainer main)
         {
-            var coroutineList = new ReorderableList(coroutines, typeof(string), true, false, true, true);
+            coroutineList = new ReorderableList(coroutines, typeof(string), true, false, true, true);
             var container = new IMGUIContainer(() =>
             {
                 foldout = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, "Coroutine List");
@@ -61,6 +64,14 @@ namespace Dunward.Capricorn
             };
             
             main.coroutineContainer.Add(container);
+        }
+
+        public void DeserializeCoroutines(NodeCoroutineData coroutineData)
+        {
+            if (coroutineData == null) return;
+
+            coroutines = coroutineData.coroutines;
+            coroutineList.list = coroutines;
         }
     }
 }
