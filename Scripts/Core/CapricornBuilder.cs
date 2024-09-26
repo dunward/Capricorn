@@ -58,9 +58,8 @@ namespace Dunward.Capricorn
             return this;
         }
 
-        public CapricornBuilder SetCharacterArea(List<NovelManager.Character> test, Transform characterArea)
+        public CapricornBuilder SetCharacterArea(Transform characterArea)
         {
-            runner.characters = test;
             runner.characterArea = characterArea;
 
             isCharacterAreaSet = true;

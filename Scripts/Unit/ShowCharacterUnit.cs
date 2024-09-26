@@ -64,9 +64,9 @@ namespace Dunward.Capricorn
 
         public override IEnumerator Execute(params object[] args)
         {
-            var chars = args[0] as List<NovelManager.Character>;
+            var chars = Resources.Load<CharacterDatabase>("CharacterDatabase").characters;
             var prefab = chars.Find(c => c.name == character).prefab;
-            var parent = args[1] as Transform;
+            var parent = args[0] as Transform;
 
             var go = Object.Instantiate(prefab, parent);
 

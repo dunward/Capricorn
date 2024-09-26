@@ -10,6 +10,5 @@ namespace Dunward.Capricorn
         internal object scriptTarget;
 
         internal Transform characterArea;
-        internal List<NovelManager.Character> characters = new List<NovelManager.Character>();
     }
 }
