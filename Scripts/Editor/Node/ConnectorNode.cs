@@ -10,20 +10,22 @@ namespace Dunward.Capricorn
 
         public ConnectorNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
-            nodeType = NodeType.Connector;
+            Initialize();
         }
 
         public ConnectorNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
         {
+            Initialize();
         }
 
         public ConnectorNode(GraphView graphView, NodeMainData mainData) : base(graphView, mainData)
         {
+            Initialize();
         }
 
-        private void UpdateSubContainers(NodeMainData mainData)
+        protected override void Initialize()
         {
-            main.action.DeserializeConnections(mainData.actionData);
+            nodeType = NodeType.Connector;
         }
 
         protected override void SetupTitleContainer()

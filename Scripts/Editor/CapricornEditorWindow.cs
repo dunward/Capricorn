@@ -32,6 +32,18 @@ namespace Dunward.Capricorn
         {
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
 
+            GUILayout.Space(5);
+
+            if (GUILayout.Button("Load", EditorStyles.toolbarButton))
+            {
+                if (EditorUtility.OpenFilePanel("Load Graph", "", "json") is string path)
+                {
+                    Debug.LogError(path);
+                }
+            }
+
+            GUILayout.Space(5);
+
             if (GUILayout.Button("Save", EditorStyles.toolbarButton))
             {
                 Debug.Log("Save clicked");

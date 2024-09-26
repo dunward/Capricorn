@@ -15,21 +15,21 @@ namespace Dunward.Capricorn
         {
         }
 
-        public IEnumerator Execute<T>(T name, T subName, T script) where T : TMP_Text
+        public IEnumerator Execute(object name, object subName, object script)
         {
-            name.text = actionData.name;
-            subName.text = actionData.subName;
-            script.text = string.Empty;
+            name.SetText(actionData.name);
+            subName.SetText(actionData.subName);
+            script.SetText(string.Empty);
 
             foreach (var letter in actionData.scripts[0])
             {
                 if (skip)
                 {
-                    script.text = actionData.scripts[0];
+                    script.SetText(actionData.scripts[0]);
                     break;
                 }
 
-                script.text += letter;
+                script.AppendText(letter);
                 yield return new WaitForSeconds(0.1f);
             }
 

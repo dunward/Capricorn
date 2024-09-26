@@ -18,6 +18,11 @@ namespace Dunward.Capricorn
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
+        private JsonSerializerSettings settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
         public GraphView()
         {
             if (nodeSearchWindow == null)
@@ -70,14 +75,15 @@ namespace Dunward.Capricorn
                     data.nodes.Add(capricornGraphNode.GetMainData());
                 }
             }
-            return JsonConvert.SerializeObject(data);
+
+            return JsonConvert.SerializeObject(data, settings);
         }
 
         public void Load(string json)
         {
             ClearGraph();
 
-            var data = JsonConvert.DeserializeObject<GraphData>(json);
+            var data = JsonConvert.DeserializeObject<GraphData>(json, settings);
             foreach (var nodeData in data.nodes)
             {
                 switch (nodeData.nodeType)

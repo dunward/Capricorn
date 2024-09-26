@@ -1,3 +1,5 @@
+using System.Collections;
+
 using UnityEngine;
 
 namespace Dunward.Capricorn
@@ -10,7 +12,7 @@ namespace Dunward.Capricorn
 #if UNITY_EDITOR
         protected override string info => $"Wait {time} seconds";
 
-        public override void OnGUI(Rect rect, float height)
+        public override void OnGUI(Rect rect, ref float height)
         {
             var singleHeight = UnityEditor.EditorGUIUtility.singleLineHeight;
             time = Mathf.Clamp(UnityEditor.EditorGUI.FloatField(new Rect(rect.x, rect.y + height, rect.width, singleHeight), "Time", time), 0, float.MaxValue);
@@ -21,5 +23,10 @@ namespace Dunward.Capricorn
             return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight;
         }
 #endif
+
+        public override IEnumerator Execute(params object[] args)
+        {
+            yield return new WaitForSeconds(time);
+        }
     }
 }

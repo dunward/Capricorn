@@ -8,15 +8,22 @@ namespace Dunward.Capricorn
     {
         public OutputNode(GraphView graphView, int id, float x, float y) : base(graphView, id, x, y)
         {
-            nodeType = NodeType.Output;
+            Initialize();
         }
 
         public OutputNode(GraphView graphView, int id, Vector2 mousePosition) : base(graphView, id, mousePosition)
         {
+            Initialize();
         }
 
         public OutputNode(GraphView graphView, NodeMainData mainData) : base(graphView, mainData)
         {
+            Initialize();
+        }
+
+        protected override void Initialize()
+        {
+            nodeType = NodeType.Output;
         }
         
         protected override void SetupTitleContainer()

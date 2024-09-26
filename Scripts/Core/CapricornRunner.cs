@@ -1,69 +1,87 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using UnityEngine;
-using UnityEngine.UI;
-
-using Newtonsoft.Json;
-using TMPro;
-
 namespace Dunward.Capricorn
 {
-    public class CapricornRunner
+    public partial class CapricornRunner
     {
-        private GraphData graphData;
+        internal GraphData graphData;
         
-        private MonoBehaviour target;
-
-#region Test
-        public TextMeshProUGUI nameTmp;
-        public TextMeshProUGUI subNameTmp;
-        public TextMeshProUGUI scriptTmp;
-
-        public Button inputPanel;
-#endregion
+        internal UnityEngine.MonoBehaviour target;
+        internal Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
         
-        public readonly NodeMainData startNode;
-        private Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
+        public System.Action onInteraction;
+        public event CoroutineDelegate AddCustomCoroutines;
+        public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
 
-        public CapricornRunner(string text, MonoBehaviour target)
+        public NodeMainData StartNode
         {
-            this.target = target;
-
-            graphData = JsonConvert.DeserializeObject<GraphData>(text);
-            startNode = graphData.nodes.Find(node => node.nodeType == NodeType.Input);
-
-            foreach (var node in graphData.nodes)
-            {
-                nodes.Add(node.id, node);
-            }
+            get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
         }
 
         public IEnumerator Run()
         {
-            var currentNode = startNode;
+            var currentNode = StartNode;
 
             while (true)
             {
-                inputPanel.onClick.RemoveAllListeners();
-                
-                // TODO: Implement coroutine list here.
-                // ...
+                yield return RunCoroutine(currentNode.coroutineData, target);
 
                 var action = CreateAction(currentNode.actionData);
-                switch (action)
-                {
-                    case TextDisplayer textDisplayer:
-                        inputPanel.onClick.AddListener(() => textDisplayer.Interaction());
-                        yield return textDisplayer.Execute(nameTmp, subNameTmp, scriptTmp);
-                        break;
-                    case SelectionDisplayer selectionDisplayer:
-                        break;
-                }
+                yield return RunAction(action);
 
                 if (currentNode.nodeType == NodeType.Output) yield break;
                 currentNode = GetNextNode(currentNode);
             }
+        }
+
+        private IEnumerator RunCoroutine(NodeCoroutineData data, UnityEngine.MonoBehaviour target)
+        {
+            foreach (var coroutine in data.coroutines)
+            {
+                if (coroutine.isWaitingUntilFinish)
+                {
+                    yield return target.StartCoroutine(ExecuteCoroutine(coroutine));
+                }
+                else
+                {
+                    target.StartCoroutine(ExecuteCoroutine(coroutine));
+                }
+            }
+        }
+
+        private IEnumerator ExecuteCoroutine(CoroutineUnit unit)
+        {
+            switch (unit)
+            {
+                case WaitUnit waitUnit:
+                    yield return waitUnit.Execute();
+                    break;
+                default:
+                    if (AddCustomCoroutines != null)
+                    {
+                        foreach (CoroutineDelegate coroutine in AddCustomCoroutines.GetInvocationList())
+                        {
+                            yield return coroutine(unit);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private IEnumerator RunAction(ActionPlayer action)
+        {
+            switch (action)
+            {
+                case TextDisplayer textDisplayer:
+                    onInteraction += textDisplayer.Interaction;
+                    yield return textDisplayer.Execute(nameTarget, subNameTarget, scriptTarget);
+                    break;
+                case SelectionDisplayer selectionDisplayer:
+                    break;
+            }
+
+            onInteraction = null;
         }
 
         private NodeMainData GetNextNode(NodeMainData node)
