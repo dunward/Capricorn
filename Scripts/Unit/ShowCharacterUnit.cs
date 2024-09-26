@@ -41,7 +41,7 @@ namespace Dunward.Capricorn
         private void ShowCharacterPopup(Rect rect)
         {
             UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-            var characters = new List<string> { "arona", "hosino", "ako" };
+            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Select(c => c.name).ToList();
 
             foreach (var c in characters.OrderBy(c => c))
             {

@@ -10,5 +10,6 @@ namespace Dunward.Capricorn
         internal object scriptTarget;
 
         internal Transform characterArea;
+        internal Transform backgroundArea;
     }
 }
