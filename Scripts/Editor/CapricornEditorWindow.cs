@@ -70,7 +70,7 @@ namespace Dunward.Capricorn
             var content = new VisualElement();
             graphView = new GraphView(filePath);
 
-            graphView.onLoadGraphFile += (path) =>
+            graphView.onChangeFilePath += (path) =>
             {
                 filePath = path;
             };

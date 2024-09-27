@@ -25,7 +25,7 @@ namespace Dunward.Capricorn
             TypeNameHandling = TypeNameHandling.Auto
         };
 
-        public System.Action<string> onLoadGraphFile;
+        public System.Action<string> onChangeFilePath;
 
         public GraphView(string filePath = null)
         {
@@ -98,7 +98,7 @@ namespace Dunward.Capricorn
             ClearGraph();
 
             filePath = path;
-            onLoadGraphFile?.Invoke(path);
+            onChangeFilePath?.Invoke(path);
 
             var json = System.IO.File.ReadAllText(path);
             var data = JsonConvert.DeserializeObject<GraphData>(json, settings);
@@ -146,6 +146,7 @@ namespace Dunward.Capricorn
             var path = EditorUtility.SaveFilePanel("Save Graph", "", "graph", "json");
             if (string.IsNullOrEmpty(path)) return;
 
+            onChangeFilePath?.Invoke(path);
             filePath = path;
             Save();
         }
