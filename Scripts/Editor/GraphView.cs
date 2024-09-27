@@ -14,6 +14,7 @@ namespace Dunward.Capricorn
     public class GraphView : UnityEditor.Experimental.GraphView.GraphView
     {
         private NodeSearchWindow nodeSearchWindow;
+        private Label titleLabel;
 
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
@@ -29,6 +30,10 @@ namespace Dunward.Capricorn
 
         public GraphView(string filePath = null)
         {
+            titleLabel = new Label(string.IsNullOrEmpty(filePath) ? "New Graph" : System.IO.Path.GetFileName(filePath));
+            titleLabel.AddToClassList("capricorn-graph-title");
+            contentContainer.Add(titleLabel);
+
             if (nodeSearchWindow == null)
                 nodeSearchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
 
@@ -48,6 +53,8 @@ namespace Dunward.Capricorn
             {
                 Load(filePath);
             }
+
+            UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => Save();
 
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
@@ -107,6 +114,7 @@ namespace Dunward.Capricorn
             ClearGraph();
 
             filePath = path;
+            UpdateTitleLabel();
             onChangeFilePath?.Invoke(path);
 
             var json = System.IO.File.ReadAllText(path);
@@ -155,6 +163,7 @@ namespace Dunward.Capricorn
             var path = EditorUtility.SaveFilePanel("Save Graph", "", "graph", "json");
             if (string.IsNullOrEmpty(path)) return;
 
+            UpdateTitleLabel();
             onChangeFilePath?.Invoke(path);
             filePath = path;
             Save();
@@ -183,6 +192,11 @@ namespace Dunward.Capricorn
         {
             DeleteElements(nodes.ToList());
             DeleteElements(edges.ToList());
+        }
+
+        private void UpdateTitleLabel()
+        {
+            titleLabel.text = string.IsNullOrEmpty(filePath) ? "New Graph" : System.IO.Path.GetFileName(filePath);
         }
 
         private class DragAndDropManipulator : PointerManipulator

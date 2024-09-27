@@ -58,9 +58,6 @@ namespace Dunward.Capricorn
                 graphView.SaveAs();
             }
 
-            GUILayout.Space(10);
-            GUILayout.Label($"{filePath}", EditorStyles.label);
-
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }

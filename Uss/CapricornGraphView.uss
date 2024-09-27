@@ -17,6 +17,18 @@
     max-width: 250px;
 }
 
+.capricorn-graph-title {
+    position: absolute;
+    padding-left: 12px;
+    padding-top: 10px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    text-shadow: 0px 0px 5px #000;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
+
 .capricorn-title-container-input {
     background-color: #6EC207;
     position: absolute;
