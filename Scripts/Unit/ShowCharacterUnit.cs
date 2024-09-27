@@ -73,7 +73,27 @@ namespace Dunward.Capricorn
             go.name = character;
 
             var map = args[1] as Dictionary<string, GameObject>;
+
+            foreach (var pair in map)
+            {
+                if (pair.Key != character)
+                {
+                    var temp1 = pair.Value.GetComponent<SpriteRenderer>();
+                    var temp2 = pair.Value.GetComponent<UnityEngine.UI.Image>();
+
+                    if (temp1 != null)
+                    {
+                        temp1.color = Color.gray;
+                    }
+                    else if (temp2 != null)
+                    {
+                        temp2.color = Color.gray;
+                    }
+                }
+            }
+
             map[character] = go;
+
 
             if (go.transform is RectTransform)
             {
@@ -93,15 +113,16 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
+                var targetColor = Color.Lerp(Color.black, Color.white, time / elapsedTime);
                 time += Time.deltaTime;
 
                 if (image != null)
                 {
-                    image.color = Color.Lerp(Color.black, Color.white, time / elapsedTime);
+                    image.color = targetColor;
                 }
                 else if (sprite != null)
                 {
-                    sprite.color = Color.Lerp(Color.black, Color.white, time / elapsedTime);
+                    sprite.color = targetColor;
                 }
 
                 yield return null;
