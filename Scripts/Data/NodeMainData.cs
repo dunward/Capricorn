@@ -11,12 +11,4 @@ namespace Dunward.Capricorn
         public NodeCoroutineData coroutineData;
         public NodeActionData actionData;
     }
-
-    public enum NodeType
-    {
-        None,
-        Input,
-        Connector,
-        Output,
-    }
 }

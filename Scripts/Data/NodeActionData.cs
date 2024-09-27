@@ -7,7 +7,7 @@ namespace Dunward.Capricorn
     [System.Serializable]
     public class NodeActionData
     {
-        public ActionNodeType actionNodeType = ActionNodeType.NONE;
+        public ActionType actionNodeType = ActionType.NONE;
 
         public bool foldout = true;
         public List<int> connections;

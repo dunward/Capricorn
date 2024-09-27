@@ -100,9 +100,9 @@ namespace Dunward.Capricorn
         {
             switch (actionData.actionNodeType)
             {
-                case ActionNodeType.CHARACTER_SCRIPT:
+                case ActionType.CHARACTER:
                     return new TextDisplayer(actionData);
-                case ActionNodeType.USER_SCRIPT:
+                case ActionType.USER:
                     return new SelectionDisplayer(actionData);
                 default:
                     return new ActionPlayer(actionData);

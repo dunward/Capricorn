@@ -70,6 +70,10 @@ namespace Dunward.Capricorn
             var parent = args[0] as Transform;
 
             var go = Object.Instantiate(prefab, parent);
+            go.name = character;
+
+            var map = args[1] as Dictionary<string, GameObject>;
+            map[character] = go;
 
             if (go.transform is RectTransform)
             {

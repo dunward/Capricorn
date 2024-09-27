@@ -60,9 +60,9 @@ namespace Dunward.Capricorn
         private void OnGUI()
         {
             EditorGUILayout.BeginHorizontal();
-            data.actionNodeType = (ActionNodeType)EditorGUILayout.EnumPopup(data.actionNodeType);
+            data.actionNodeType = (ActionType)EditorGUILayout.EnumPopup(data.actionNodeType);
 
-            if (data.actionNodeType == ActionNodeType.USER_SCRIPT)
+            if (data.actionNodeType == ActionType.USER)
             {
                 var temp = EditorGUILayout.IntField(data.SelectionCount, GUILayout.Width(20));
                 data.SelectionCount = Mathf.Clamp(temp, 1, 4);
@@ -74,16 +74,16 @@ namespace Dunward.Capricorn
 
             EditorGUILayout.EndHorizontal();
 
-            if (data.actionNodeType != ActionNodeType.NONE)
+            if (data.actionNodeType != ActionType.NONE)
             {
                 data.foldout = EditorGUILayout.BeginFoldoutHeaderGroup(data.foldout, "Details");
                 if (data.foldout)
                 {
-                    if (data.actionNodeType == ActionNodeType.CHARACTER_SCRIPT)
+                    if (data.actionNodeType == ActionType.CHARACTER)
                     {
                         DrawCharacterScript();
                     }
-                    else if (data.actionNodeType == ActionNodeType.USER_SCRIPT)
+                    else if (data.actionNodeType == ActionType.USER)
                     {
                         DrawUserScript();
                     }
