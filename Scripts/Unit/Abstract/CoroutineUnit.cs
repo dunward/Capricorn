@@ -11,6 +11,7 @@ namespace Dunward.Capricorn
 
 #if UNITY_EDITOR
         protected virtual string info => "Coroutine Element";
+        protected virtual bool supportWaitingFinish => true;
 
         public virtual void OnGUI(Rect rect, int index, bool isActive, bool isFocused)
         {
@@ -18,8 +19,11 @@ namespace Dunward.Capricorn
             var height = 0f;
             UnityEditor.EditorGUI.LabelField(new Rect(rect.x, rect.y, rect.width, singleHeight), info, UnityEditor.EditorStyles.boldLabel);
             height += singleHeight;
-            isWaitingUntilFinish = UnityEditor.EditorGUI.Toggle(new Rect(rect.x, rect.y + height, rect.width, singleHeight), "Waiting Until Finish", isWaitingUntilFinish);
-            height += singleHeight;
+            if (supportWaitingFinish)
+            {
+                isWaitingUntilFinish = UnityEditor.EditorGUI.Toggle(new Rect(rect.x, rect.y + height, rect.width, singleHeight), "Waiting Until Finish", isWaitingUntilFinish);
+                height += singleHeight;
+            }
             OnGUI(rect, ref height);
         }
 
@@ -29,7 +33,7 @@ namespace Dunward.Capricorn
 
         public virtual float GetHeight()
         {
-            return UnityEditor.EditorGUIUtility.singleLineHeight * 2;
+            return UnityEditor.EditorGUIUtility.singleLineHeight * (supportWaitingFinish ? 2 : 1);
         }
 #endif
 
