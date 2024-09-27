@@ -75,15 +75,16 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
+                var targetColor = new Color(1, 1, 1, time / elapsedTime);
                 time += Time.deltaTime;
 
                 if (image != null)
                 {
-                    image.color = new Color(1, 1, 1, time / elapsedTime);
+                    image.color = targetColor;
                 }
                 else if (sprite != null)
                 {
-                    sprite.color = new Color(1, 1, 1, time / elapsedTime);
+                    sprite.color = targetColor;
                 }
 
                 yield return null;

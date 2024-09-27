@@ -60,15 +60,16 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
+                var targetColor = Color.Lerp(Color.white, Color.black, time / elapsedTime);
                 time += Time.deltaTime;
 
                 if (image != null)
                 {
-                    image.color = Color.Lerp(Color.white, Color.black, time / elapsedTime);
+                    image.color = targetColor;
                 }
                 else if (sprite != null)
                 {
-                    sprite.color = Color.Lerp(Color.white, Color.black, time / elapsedTime);
+                    sprite.color = targetColor;
                 }
 
                 yield return null;
