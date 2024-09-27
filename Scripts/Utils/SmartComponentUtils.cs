@@ -4,7 +4,7 @@ using TMPro;
 
 namespace Dunward.Capricorn
 {
-    public static class TextUtils
+    public static class SmartComponentUtils
     {
         public static void SetText(this object textComponent, string text)
         {
@@ -15,6 +15,8 @@ namespace Dunward.Capricorn
                     break;
                 case Text uiText:
                     uiText.text = text;
+                    break;
+                case null:
                     break;
                 default:
                     throw new System.Exception("TextUtils.SetText() is not implemented for this type.");
@@ -31,6 +33,8 @@ namespace Dunward.Capricorn
                 case Text uiText:
                     uiText.text += text;
                     break;
+                case null:
+                    break;
                 default:
                     throw new System.Exception("TextUtils.AppendText() is not implemented for this type.");
             }
@@ -44,6 +48,8 @@ namespace Dunward.Capricorn
                     return tmpText.text;
                 case Text uiText:
                     return uiText.text;
+                case null:
+                    return null;
                 default:
                     throw new System.Exception("TextUtils.GetText() is not implemented for this type.");
             }
