@@ -58,6 +58,15 @@ namespace Dunward.Capricorn
             this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node",
                                     (action) => SearchWindow.Open(new SearchWindowContext(action.eventInfo.mousePosition), nodeSearchWindow),
                                     DropdownMenuAction.AlwaysEnabled)));
+            
+            this.RegisterCallback<KeyDownEvent>(evt =>
+            {
+                if (evt.keyCode == KeyCode.S && evt.actionKey)
+                {
+                    Save();
+                    evt.StopPropagation();
+                }
+            });
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
