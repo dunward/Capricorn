@@ -61,7 +61,7 @@ namespace Dunward.Capricorn
                     yield return showCharacterUnit.Execute(characterArea);
                     break;
                 case ChangeBackgroundUnit changeBackgroundUnit:
-                    yield return changeBackgroundUnit.Execute(backgroundArea);
+                    yield return changeBackgroundUnit.Execute(backgroundArea, lastBackground);
                     break;
                 default:
                     if (AddCustomCoroutines != null)

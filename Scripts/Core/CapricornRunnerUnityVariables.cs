@@ -11,5 +11,7 @@ namespace Dunward.Capricorn
 
         internal Transform characterArea;
         internal Transform backgroundArea;
+
+        private Ref<GameObject> lastBackground = new Ref<GameObject>(null);
     }
 }

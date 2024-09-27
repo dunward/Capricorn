@@ -58,6 +58,7 @@ namespace Dunward.Capricorn
             var parent = args[0] as Transform;
             
             var go = Object.Instantiate(prefab, parent);
+            go.name = backgroundImage;
 
             var time = 0f;
             var image = go.GetComponent<UnityEngine.UI.Image>();
@@ -87,6 +88,10 @@ namespace Dunward.Capricorn
 
                 yield return null;
             }
+
+            var goRef = args[1] as Ref<GameObject>;
+            Object.Destroy(goRef.Value);
+            goRef.Value = go;
         }
     }
 }
