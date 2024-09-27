@@ -48,16 +48,14 @@ namespace Dunward.Capricorn
 
             if (GUILayout.Button("Save", EditorStyles.toolbarButton))
             {
-                Debug.Log("Save clicked");
+                graphView.Save();
             }
 
             GUILayout.Space(5);
             
             if (GUILayout.Button("Save As...", EditorStyles.toolbarButton))
             {
-                Debug.Log("Save As clicked");
-                var json = graphView.SerializeGraph();
-                Debug.Log(json);
+                graphView.SaveAs();
             }
 
             GUILayout.Space(10);

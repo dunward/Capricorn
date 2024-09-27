@@ -128,7 +128,28 @@ namespace Dunward.Capricorn
             ConnectDeserializeNodes();
             lastNodeID = data.nodes.Max(n => n.id);
         }
-        
+     
+        public void Save()
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                SaveAs();
+                return;
+            }
+
+            var json = SerializeGraph();
+            System.IO.File.WriteAllText(filePath, json);
+        }
+
+        public void SaveAs()
+        {
+            var path = EditorUtility.SaveFilePanel("Save Graph", "", "graph", "json");
+            if (string.IsNullOrEmpty(path)) return;
+
+            filePath = path;
+            Save();
+        }
+
         private void ConnectDeserializeNodes()
         {
             foreach (var node in nodes)
