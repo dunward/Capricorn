@@ -9,8 +9,14 @@ namespace Dunward.Capricorn
     {
         public float time;
 
+        public WaitUnit()
+        {
+            isWaitingUntilFinish = true;
+        }
+
 #if UNITY_EDITOR
         protected override string info => $"Wait {time} seconds";
+        protected override bool supportWaitingFinish => false;
 
         public override void OnGUI(Rect rect, ref float height)
         {
