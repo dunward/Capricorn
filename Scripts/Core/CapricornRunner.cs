@@ -58,7 +58,7 @@ namespace Dunward.Capricorn
                     yield return waitUnit.Execute();
                     break;
                 case ShowCharacterUnit showCharacterUnit:
-                    yield return showCharacterUnit.Execute(characterArea);
+                    yield return showCharacterUnit.Execute(characterArea, characters);
                     break;
                 case ChangeBackgroundUnit changeBackgroundUnit:
                     yield return changeBackgroundUnit.Execute(backgroundArea, lastBackground);

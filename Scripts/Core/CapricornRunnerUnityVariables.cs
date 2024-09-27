@@ -13,5 +13,6 @@ namespace Dunward.Capricorn
         internal Transform backgroundArea;
 
         private Ref<GameObject> lastBackground = new Ref<GameObject>(null);
+        private Dictionary<string, GameObject> characters = new Dictionary<string, GameObject>();
     }
 }
