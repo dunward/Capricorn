@@ -18,12 +18,16 @@ namespace Dunward.Capricorn
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
+        private string filePath = null;
+
         private JsonSerializerSettings settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto
         };
 
-        public GraphView()
+        public System.Action<string> onLoadGraphFile;
+
+        public GraphView(string filePath = null)
         {
             if (nodeSearchWindow == null)
                 nodeSearchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
@@ -35,8 +39,15 @@ namespace Dunward.Capricorn
                 AddElement(node);
             };
 
-            inputNode = new InputNode(this, -1, 100, 200);
-            AddElement(inputNode);
+            if (string.IsNullOrEmpty(filePath))
+            {
+                inputNode = new InputNode(this, -1, 0, 0);
+                AddElement(inputNode);
+            }
+            else
+            {
+                Load(filePath);
+            }
 
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
@@ -85,6 +96,9 @@ namespace Dunward.Capricorn
         public void Load(string path)
         {
             ClearGraph();
+
+            filePath = path;
+            onLoadGraphFile?.Invoke(path);
 
             var json = System.IO.File.ReadAllText(path);
             var data = JsonConvert.DeserializeObject<GraphData>(json, settings);

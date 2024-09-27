@@ -11,6 +11,8 @@ namespace Dunward.Capricorn
 
         private GraphView graphView;
 
+        private string filePath = null;
+
         [MenuItem("Constellation/Capricorn/Graph View")]
         public static void ShowExample()
         {
@@ -58,6 +60,9 @@ namespace Dunward.Capricorn
                 Debug.Log(json);
             }
 
+            GUILayout.Space(10);
+            GUILayout.Label($"{filePath}", EditorStyles.label);
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
@@ -65,7 +70,13 @@ namespace Dunward.Capricorn
         private void AddGraphView()
         {
             var content = new VisualElement();
-            graphView = new GraphView();
+            graphView = new GraphView(filePath);
+
+            graphView.onLoadGraphFile += (path) =>
+            {
+                filePath = path;
+            };
+
             content.styleSheets.Add(graphStyle);
             content.name = "content";
             content.Add(graphView);
