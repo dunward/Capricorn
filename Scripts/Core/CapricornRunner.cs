@@ -63,6 +63,9 @@ namespace Dunward.Capricorn
                 case ChangeBackgroundUnit changeBackgroundUnit:
                     yield return changeBackgroundUnit.Execute(backgroundArea, lastBackground);
                     break;
+                case DeleteCharacterUnit deleteCharacterUnit:
+                    yield return deleteCharacterUnit.Execute(characters);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
