@@ -15,8 +15,6 @@ namespace Dunward.Capricorn
     {
         private NodeSearchWindow nodeSearchWindow;
 
-        private string filePath;
-
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
         private int lastNodeID = 0;
 
@@ -70,6 +68,9 @@ namespace Dunward.Capricorn
         public string SerializeGraph()
         {
             var data = new GraphData();
+            data.position = viewTransform.position;
+            data.zoomFactor = viewTransform.scale.x;
+
             foreach (var node in nodes)
             {
                 if (node is BaseNode capricornGraphNode)
@@ -87,12 +88,15 @@ namespace Dunward.Capricorn
 
             var json = System.IO.File.ReadAllText(path);
             var data = JsonConvert.DeserializeObject<GraphData>(json, settings);
+            viewTransform.position = data.position;
+            viewTransform.scale = new Vector3(data.zoomFactor, data.zoomFactor, 1);
+
             foreach (var nodeData in data.nodes)
             {
                 switch (nodeData.nodeType)
                 {
                     case NodeType.Input:
-                        var inputNode = new InputNode(this, nodeData);
+                        inputNode = new InputNode(this, nodeData);
                         AddElement(inputNode);
                         break;
                     case NodeType.Output:
