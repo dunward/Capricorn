@@ -38,11 +38,6 @@ namespace Dunward.Capricorn
             yield return new WaitUntil(() => isComplete);
         }
 
-        public override int Next()
-        {
-            return actionData.connections[0];
-        }
-
         public void Interaction()
         {
             if (isFinish) isComplete = true;

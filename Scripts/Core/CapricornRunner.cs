@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,13 +7,19 @@ namespace Dunward.Capricorn
     public partial class CapricornRunner
     {
         internal GraphData graphData;
-        
+
         internal UnityEngine.MonoBehaviour target;
         internal Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
-        
+
         public System.Action onInteraction;
+        public Func<List<string>, List<UnityEngine.UI.Button>> onSelectionCreate;
+
         public event CoroutineDelegate AddCustomCoroutines;
         public delegate IEnumerator CoroutineDelegate(CoroutineUnit unit);
+
+        public float selectionDestroyAfterDelay = 1f;
+
+        private int nextNodeIndex = -1;
 
         public NodeMainData StartNode
         {
@@ -31,7 +38,7 @@ namespace Dunward.Capricorn
                 yield return RunAction(action);
 
                 if (currentNode.nodeType == NodeType.Output) yield break;
-                currentNode = GetNextNode(currentNode);
+                currentNode = Next();
             }
         }
 
@@ -83,6 +90,7 @@ namespace Dunward.Capricorn
 
         private IEnumerator RunAction(ActionPlayer action)
         {
+            nextNodeIndex = action.GetNextNodeIndex();
             switch (action)
             {
                 case TextDisplayer textDisplayer:
@@ -90,16 +98,18 @@ namespace Dunward.Capricorn
                     yield return textDisplayer.Execute(nameTarget, subNameTarget, scriptTarget);
                     break;
                 case SelectionDisplayer selectionDisplayer:
+                    var selections = onSelectionCreate.Invoke(selectionDisplayer.GetSelections());
+                    yield return selectionDisplayer.Execute(selections, selectionDestroyAfterDelay);
+                    nextNodeIndex = selectionDisplayer.GetNextNodeIndex();
                     break;
             }
 
             onInteraction = null;
         }
 
-        private NodeMainData GetNextNode(NodeMainData node)
+        private NodeMainData Next()
         {
-            var nextConnection = node.actionData.connections[0];
-            return nodes[nextConnection];
+            return nodes[nextNodeIndex];
         }
         
         private ActionPlayer CreateAction(NodeActionData actionData)

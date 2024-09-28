@@ -5,15 +5,17 @@ namespace Dunward.Capricorn
         protected NodeActionData actionData;
 
         protected bool isComplete = false;
+        protected int nextConnection = 0;
 
         public ActionPlayer(NodeActionData actionData)
         {
             this.actionData = actionData;
         }
-        
-        public virtual int Next()
+
+        public virtual int GetNextNodeIndex()
         {
-            return actionData.connections[0];
+            if (actionData.connections.Count == 0) return -1; // Output node error handling - TODO: clean up action player class
+            return actionData.connections[nextConnection];
         }
     }
 }

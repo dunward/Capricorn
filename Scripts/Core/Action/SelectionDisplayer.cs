@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Dunward.Capricorn
 {
@@ -10,10 +12,26 @@ namespace Dunward.Capricorn
         {
         }
 
-        public IEnumerator Run()
+        public List<string> GetSelections()
         {
-            Debug.LogError($"{string.Join(", ", actionData.scripts)}");
-            yield return null;
+            return actionData.scripts;
+        }
+
+        public IEnumerator Execute(List<Button> buttons, float selectionDestroyAfterDelay)
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                int index = i;
+                buttons[i].onClick.AddListener(() =>
+                {
+                    isComplete = true;
+                    nextConnection = index;
+                });
+            }
+
+            yield return new WaitUntil(() => isComplete);
+            
+            yield return new WaitForSeconds(selectionDestroyAfterDelay);
         }
     }
 }
