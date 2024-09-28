@@ -66,6 +66,9 @@ namespace Dunward.Capricorn
                 case DeleteCharacterUnit deleteCharacterUnit:
                     yield return deleteCharacterUnit.Execute(characters);
                     break;
+                case DeleteAllCharacterUnit deleteAllCharacterUnit:
+                    yield return deleteAllCharacterUnit.Execute(characters);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
