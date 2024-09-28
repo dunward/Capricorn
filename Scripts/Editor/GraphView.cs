@@ -154,8 +154,10 @@ namespace Dunward.Capricorn
                 return;
             }
 
+            EditorUtility.DisplayProgressBar("Capricorn", "Save Graph...", 0.112f);
             var json = SerializeGraph();
             System.IO.File.WriteAllText(filePath, json);
+            EditorUtility.ClearProgressBar();
         }
 
         public void SaveAs()
