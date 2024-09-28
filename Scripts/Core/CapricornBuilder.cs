@@ -14,6 +14,7 @@ namespace Dunward.Capricorn
         private bool isNameTargetsSet = false;
         private bool isCharacterAreaSet = false;
         private bool isBackgroundAreaSet = false;
+        private bool isForegroundAreaSet = false;
 
         private CapricornBuilder()
         {
@@ -77,6 +78,15 @@ namespace Dunward.Capricorn
             return this;
         }
 
+        public CapricornBuilder SetForegroundArea(Transform foregroundArea)
+        {
+            runner.foregroundArea = foregroundArea;
+
+            isForegroundAreaSet = true;
+
+            return this;
+        }
+
         public CapricornBuilder SetInteraction(UnityEngine.Events.UnityEvent evt)
         {
             evt.AddListener(() => runner.onInteraction?.Invoke());
@@ -92,6 +102,8 @@ namespace Dunward.Capricorn
                 throw new InvalidOperationException("Character area is not set.");
             if (!isBackgroundAreaSet)
                 throw new InvalidOperationException("Background area is not set.");
+            if (!isForegroundAreaSet)
+                throw new InvalidOperationException("Foreground area is not set.");
 
             runner.target = target;
 
