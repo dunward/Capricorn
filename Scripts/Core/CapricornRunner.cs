@@ -82,6 +82,9 @@ namespace Dunward.Capricorn
                 case DeleteAllCharacterUnit deleteAllCharacterUnit:
                     yield return deleteAllCharacterUnit.Execute(characters);
                     break;
+                case ClearDialogueTextUnit clearDialogueTextUnit:
+                    yield return clearDialogueTextUnit.Execute(nameTarget, subNameTarget, scriptTarget);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
