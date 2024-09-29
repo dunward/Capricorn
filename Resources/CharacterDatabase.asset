@@ -17,3 +17,5 @@ MonoBehaviour:
     prefab: {fileID: 1677574409725026616, guid: 6bcacbf74f0380c42b7096ed415eaead, type: 3}
   - name: ako
     prefab: {fileID: 5718246740520980008, guid: f94694553afaf944daa3ad7ff48044be, type: 3}
+  - name: rin
+    prefab: {fileID: 3892043808981072669, guid: faea1f53c01ab8344a58af3754e98938, type: 3}

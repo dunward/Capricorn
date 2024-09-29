@@ -12,5 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2396e6c50c9e26409c5a0678c7d8a0f, type: 3}
   m_Name: AudioDatabase
   m_EditorClassIdentifier: 
-  audioPrefab: {fileID: 0}
-  backgrounds: []
+  bgmPrefab: {fileID: 9083914401876240233, guid: a1f85fe8b1cb428429c8f9cd087f2eec, type: 3}
+  sfxPrefab: {fileID: 0}
+  bgms:
+  - name: aoharu
+    clip: {fileID: 8300000, guid: 518dec0d8a0a67d418be1612b1a2c03a, type: 3}
+    maxVolume: 1
+  - name: 12
+    clip: {fileID: 8300000, guid: e18548354e224644eaf72b82875a7bb4, type: 3}
+    maxVolume: 1
+  - name: Test
+    clip: {fileID: 8300000, guid: 20c3e91ab2105a449bb43f2edc4db364, type: 3}
+    maxVolume: 1
+  sfxs: []
