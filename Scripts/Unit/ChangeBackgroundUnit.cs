@@ -90,6 +90,15 @@ namespace Dunward.Capricorn
                 yield return null;
             }
 
+            if (image != null)
+            {
+                image.color = Color.white;
+            }
+            else if (sprite != null)
+            {
+                sprite.color = Color.white;
+            }
+
             var goRef = args[1] as Ref<GameObject>;
             Object.Destroy(goRef.Value);
             goRef.Value = go;
