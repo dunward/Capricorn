@@ -15,6 +15,7 @@ namespace Dunward.Capricorn
 
         private Ref<GameObject> lastBackground = new Ref<GameObject>(null);
         private Ref<GameObject> lastForeground = new Ref<GameObject>(null);
+        private Ref<GameObject> bgmObject = new Ref<GameObject>(null);
         private Dictionary<string, GameObject> characters = new Dictionary<string, GameObject>();
     }
 }

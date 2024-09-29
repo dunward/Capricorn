@@ -85,6 +85,9 @@ namespace Dunward.Capricorn
                 case ClearDialogueTextUnit clearDialogueTextUnit:
                     yield return clearDialogueTextUnit.Execute(nameTarget, subNameTarget, scriptTarget);
                     break;
+                case PlayBGMUnit playBGMUnit:
+                    yield return playBGMUnit.Execute(bgmObject);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
