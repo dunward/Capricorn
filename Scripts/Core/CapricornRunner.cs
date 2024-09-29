@@ -26,6 +26,20 @@ namespace Dunward.Capricorn
             get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
         }
 
+        public void Clear()
+        {
+            UnityEngine.Object.Destroy(lastBackground.Value);
+            UnityEngine.Object.Destroy(lastForeground.Value);
+            UnityEngine.Object.Destroy(bgmObject.Value);
+
+            foreach (var character in characters)
+            {
+                UnityEngine.Object.Destroy(character.Value);
+            }
+
+            characters.Clear();
+        }
+
         public IEnumerator Run()
         {
             var currentNode = StartNode;
