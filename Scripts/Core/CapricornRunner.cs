@@ -88,6 +88,9 @@ namespace Dunward.Capricorn
                 case PlayBGMUnit playBGMUnit:
                     yield return playBGMUnit.Execute(bgmObject);
                     break;
+                case StopBGMUnit stopBGMUnit:
+                    yield return stopBGMUnit.Execute(bgmObject);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
