@@ -28,6 +28,10 @@ namespace Dunward.Capricorn
 
         public void Clear()
         {
+            nameTarget.SetText("");
+            subNameTarget.SetText("");
+            scriptTarget.SetText("");
+
             UnityEngine.Object.Destroy(lastBackground.Value);
             UnityEngine.Object.Destroy(lastForeground.Value);
             UnityEngine.Object.Destroy(bgmObject.Value);
