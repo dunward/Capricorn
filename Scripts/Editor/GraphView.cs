@@ -55,6 +55,13 @@ namespace Dunward.Capricorn
             }
 
             UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => Save();
+            EditorApplication.playModeStateChanged += (state) =>
+            {
+                if (state == PlayModeStateChange.EnteredPlayMode)
+                {
+                    Save();
+                }
+            };
 
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
@@ -107,6 +114,16 @@ namespace Dunward.Capricorn
             }
 
             return JsonConvert.SerializeObject(data, settings);
+        }
+
+        public void ClearGraphView()
+        {
+            ClearGraph();
+            inputNode = new InputNode(this, -1, 0, 0);
+            AddElement(inputNode);
+            filePath = null;
+            onChangeFilePath?.Invoke(null);
+            UpdateTitleLabel();
         }
 
         public void Load(string path)

@@ -58,6 +58,17 @@ namespace Dunward.Capricorn
                 graphView.SaveAs();
             }
 
+            GUILayout.Space(20);
+
+            if (GUILayout.Button("Create New Graph", EditorStyles.toolbarButton))
+            {
+                // dialog to confirm
+                if (EditorUtility.DisplayDialog("Clear Graph", "Are you sure you want to clear the graph?", "Yes", "No"))
+                {
+                    graphView.ClearGraphView();
+                }
+            }
+
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
