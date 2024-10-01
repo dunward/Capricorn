@@ -84,7 +84,6 @@ namespace Dunward.Capricorn
             nodeType = NodeType.Connector;
             SetupTitleContainer();
 
-            // get capricorn-title-container-output class and remove it
             titleContainer.RemoveAt(titleContainer.childCount - 1);
             title = string.Empty;
 
