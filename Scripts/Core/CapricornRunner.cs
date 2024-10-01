@@ -1,17 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace Dunward.Capricorn
 {
-    public partial class CapricornRunner
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(CapricornDialogue))]
+    [RequireComponent(typeof(CapricornSettings))]
+    [RequireComponent(typeof(CapricornCache))]
+    public partial class CapricornRunner : MonoBehaviour
     {
-        internal GraphData graphData;
+        private CapricornDialogue dialogue;
+        private CapricornSettings settings;
+        private CapricornCache cache;
 
-        internal UnityEngine.MonoBehaviour target;
+        private GraphData graphData;
+
         internal Dictionary<int, NodeMainData> nodes = new Dictionary<int, NodeMainData>();
 
-        public System.Action onInteraction;
+        internal UnityEvent bindingInteraction;
         public Func<List<string>, List<UnityEngine.UI.Button>> onSelectionCreate;
 
         public event CoroutineDelegate AddCustomCoroutines;
@@ -21,24 +31,52 @@ namespace Dunward.Capricorn
 
         private int nextNodeIndex = -1;
 
+        private Dictionary<string, GameObject> characters = new Dictionary<string, GameObject>();
+
         public NodeMainData StartNode
         {
             get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
         }
 
+        private void Initialize()
+        {
+            dialogue = GetComponent<CapricornDialogue>();
+            settings = GetComponent<CapricornSettings>();
+            cache = GetComponent<CapricornCache>();
+
+            dialogue.Initialize();
+        }
+
+        public void Load(string json)
+        {
+            Initialize();
+
+            graphData = JsonConvert.DeserializeObject<GraphData>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
+            nodes.Clear();
+
+            foreach (var node in graphData.nodes)
+            {
+                nodes.Add(node.id, node);
+            }
+        }
+
         public void Clear()
         {
-            nameTarget.SetText("");
-            subNameTarget.SetText("");
-            scriptTarget.SetText("");
+            dialogue.NameTarget.SetText("");
+            dialogue.SubNameTarget.SetText("");
+            dialogue.ScriptTarget.SetText("");
 
-            UnityEngine.Object.Destroy(lastBackground.Value);
-            UnityEngine.Object.Destroy(lastForeground.Value);
-            UnityEngine.Object.Destroy(bgmObject.Value);
+            Destroy(cache.lastBackground);
+            Destroy(cache.lastForeground);
+            Destroy(cache.bgmObject);
 
             foreach (var character in characters)
             {
-                UnityEngine.Object.Destroy(character.Value);
+                Destroy(character.Value);
             }
 
             characters.Clear();
@@ -50,7 +88,7 @@ namespace Dunward.Capricorn
 
             while (true)
             {
-                yield return RunCoroutine(currentNode.coroutineData, target);
+                yield return RunCoroutine(currentNode.coroutineData);
 
                 var action = CreateAction(currentNode.actionData);
                 yield return RunAction(action);
@@ -60,17 +98,17 @@ namespace Dunward.Capricorn
             }
         }
 
-        private IEnumerator RunCoroutine(NodeCoroutineData data, UnityEngine.MonoBehaviour target)
+        private IEnumerator RunCoroutine(NodeCoroutineData data)
         {
             foreach (var coroutine in data.coroutines)
             {
                 if (coroutine.isWaitingUntilFinish)
                 {
-                    yield return target.StartCoroutine(ExecuteCoroutine(coroutine));
+                    yield return StartCoroutine(ExecuteCoroutine(coroutine));
                 }
                 else
                 {
-                    target.StartCoroutine(ExecuteCoroutine(coroutine));
+                    StartCoroutine(ExecuteCoroutine(coroutine));
                 }
             }
         }
@@ -83,16 +121,16 @@ namespace Dunward.Capricorn
                     yield return waitUnit.Execute();
                     break;
                 case ShowCharacterUnit showCharacterUnit:
-                    yield return showCharacterUnit.Execute(characterArea, characters);
+                    yield return showCharacterUnit.Execute(settings.characterArea, characters);
                     break;
                 case ChangeBackgroundUnit changeBackgroundUnit:
-                    yield return changeBackgroundUnit.Execute(backgroundArea, lastBackground);
+                    yield return changeBackgroundUnit.Execute(settings.backgroundArea, cache.lastBackground);
                     break;
                 case ChangeForegroundUnit changeForegroundUnit:
-                    yield return changeForegroundUnit.Execute(foregroundArea, lastForeground);
+                    yield return changeForegroundUnit.Execute(settings.foregroundArea, cache.lastForeground);
                     break;
                 case DeleteForegroundUnit deleteForegroundUnit:
-                    yield return deleteForegroundUnit.Execute(lastForeground);
+                    yield return deleteForegroundUnit.Execute(cache.lastForeground);
                     break;
                 case DeleteCharacterUnit deleteCharacterUnit:
                     yield return deleteCharacterUnit.Execute(characters);
@@ -101,13 +139,13 @@ namespace Dunward.Capricorn
                     yield return deleteAllCharacterUnit.Execute(characters);
                     break;
                 case ClearDialogueTextUnit clearDialogueTextUnit:
-                    yield return clearDialogueTextUnit.Execute(nameTarget, subNameTarget, scriptTarget);
+                    yield return clearDialogueTextUnit.Execute(dialogue.NameTarget, dialogue.SubNameTarget, dialogue.ScriptTarget);
                     break;
                 case PlayBGMUnit playBGMUnit:
-                    yield return playBGMUnit.Execute(bgmObject);
+                    yield return playBGMUnit.Execute(cache.bgmObject);
                     break;
                 case StopBGMUnit stopBGMUnit:
-                    yield return stopBGMUnit.Execute(bgmObject);
+                    yield return stopBGMUnit.Execute(cache.bgmObject);
                     break;
                 default:
                     if (AddCustomCoroutines != null)
@@ -127,8 +165,10 @@ namespace Dunward.Capricorn
             switch (action)
             {
                 case TextDisplayer textDisplayer:
-                    onInteraction += textDisplayer.Interaction;
-                    yield return textDisplayer.Execute(nameTarget, subNameTarget, scriptTarget);
+                    bindingInteraction.AddListener(textDisplayer.Interaction);
+                    yield return textDisplayer.Execute(dialogue.NameTarget, dialogue.SubNameTarget, dialogue.ScriptTarget);
+                    bindingInteraction.RemoveListener(textDisplayer.Interaction);
+                    
                     break;
                 case SelectionDisplayer selectionDisplayer:
                     var selections = onSelectionCreate.Invoke(selectionDisplayer.GetSelections());
@@ -137,7 +177,6 @@ namespace Dunward.Capricorn
                     break;
             }
 
-            onInteraction = null;
         }
 
         private NodeMainData Next()
