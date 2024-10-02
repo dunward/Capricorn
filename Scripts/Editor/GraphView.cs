@@ -26,8 +26,6 @@ namespace Dunward.Capricorn
             TypeNameHandling = TypeNameHandling.Auto
         };
 
-        private List<string> cacheCopyData = new List<string>();
-
         public System.Action<string> onChangeFilePath;
 
         public GraphView(string filePath = null)
@@ -64,10 +62,10 @@ namespace Dunward.Capricorn
                     Save();
                 }
             };
-
+            
             serializeGraphElements = (elements) =>
             {
-                cacheCopyData.Clear();
+                var datas = new List<NodeMainData>();
 
                 foreach (var element in elements)
                 {
@@ -75,13 +73,38 @@ namespace Dunward.Capricorn
                     {
                         case ConnectorNode:
                         case OutputNode:
-                            var json = JsonConvert.SerializeObject((element as BaseNode).GetMainData(), settings);
-                            cacheCopyData.Add(json);
+                            var temp = ((BaseNode)element).GetMainData();
+                            temp.id = ++lastNodeID;
+                            temp.x += 100;
+                            temp.y += 100;
+                            datas.Add(temp);
                             break;
                     }
                 }
 
-                return string.Join(";;;", cacheCopyData);
+                return JsonConvert.SerializeObject(datas, settings);
+            };
+
+            unserializeAndPaste = (operationName, data) =>
+            {
+                var datas = JsonConvert.DeserializeObject<List<NodeMainData>>(data, settings);
+
+                foreach (var nodeData in datas)
+                {
+                    switch (nodeData.nodeType)
+                    {
+                        case NodeType.Connector:
+                            var connector = new ConnectorNode(this, nodeData);
+                            AddElement(connector);
+                            break;
+                        case NodeType.Output:
+                            var output = new OutputNode(this, nodeData);
+                            AddElement(output);
+                            break;
+                    }
+                }
+
+                lastNodeID = datas.Max(n => n.id);
             };
 
             this.AddManipulator(new ContentZoomer());
