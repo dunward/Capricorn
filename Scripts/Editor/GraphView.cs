@@ -26,6 +26,8 @@ namespace Dunward.Capricorn
             TypeNameHandling = TypeNameHandling.Auto
         };
 
+        private List<string> cacheCopyData = new List<string>();
+
         public System.Action<string> onChangeFilePath;
 
         public GraphView(string filePath = null)
@@ -61,6 +63,25 @@ namespace Dunward.Capricorn
                 {
                     Save();
                 }
+            };
+
+            serializeGraphElements = (elements) =>
+            {
+                cacheCopyData.Clear();
+
+                foreach (var element in elements)
+                {
+                    switch (element)
+                    {
+                        case ConnectorNode:
+                        case OutputNode:
+                            var json = JsonConvert.SerializeObject((element as BaseNode).GetMainData(), settings);
+                            cacheCopyData.Add(json);
+                            break;
+                    }
+                }
+
+                return string.Join(";;;", cacheCopyData);
             };
 
             this.AddManipulator(new ContentZoomer());
