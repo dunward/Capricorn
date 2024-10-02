@@ -57,7 +57,7 @@ namespace Dunward.Capricorn
             UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => Save();
             EditorApplication.playModeStateChanged += (state) =>
             {
-                if (state == PlayModeStateChange.EnteredPlayMode)
+                if (state == PlayModeStateChange.ExitingEditMode)
                 {
                     Save();
                 }
