@@ -17,6 +17,22 @@
     max-width: 250px;
 }
 
+.capricorn-debug-start-node {
+    position: absolute;
+    background-color: var(--unity-colors-button-background-pressed);
+    border-color: var(--unity-colors-button-border_accent);
+    -unity-font-style: bold;
+    align-self: center;
+    background-position-x: 0px;
+    top: -5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 2px;
+    border-width: 1px;
+}
+
 .capricorn-graph-title {
     position: absolute;
     padding-left: 12px;

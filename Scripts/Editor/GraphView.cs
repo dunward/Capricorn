@@ -17,6 +17,7 @@ namespace Dunward.Capricorn
         private Label titleLabel;
 
         private InputNode inputNode; // This node is the start point of the graph. It is not deletable and unique.
+        private ConnectorNode debugStartNode; // This node is the start point of the debug.
         private int lastNodeID = 0;
 
         private string filePath = null;
@@ -116,9 +117,26 @@ namespace Dunward.Capricorn
             this.AddManipulator(new RectangleSelector());
 
             this.AddManipulator(new DragAndDropManipulator(data => Load(data)));
-            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.AppendAction("Add Node",
+            this.AddManipulator(new ContextualMenuManipulator(evt => evt.menu.InsertAction(0, "Add Node",
                                     (action) => SearchWindow.Open(new SearchWindowContext(action.eventInfo.mousePosition), nodeSearchWindow),
                                     DropdownMenuAction.AlwaysEnabled)));
+
+            this.AddManipulator(new ContextualMenuManipulator(evt =>
+            {
+                switch (evt.target)
+                {
+                    case ConnectorNode connector:
+                        evt.menu.InsertAction(0, "Set Debug Start Node", (action) => 
+                        { 
+                            debugStartNode?.Q(className: "capricorn-debug-start-node")?.RemoveFromHierarchy();
+                            var label = new Label("Debug");
+                            label.AddToClassList("capricorn-debug-start-node");
+                            connector.Add(label);
+                            debugStartNode = connector; 
+                        });
+                        break;
+                }
+            }));
             
             this.RegisterCallback<KeyDownEvent>(evt =>
             {
