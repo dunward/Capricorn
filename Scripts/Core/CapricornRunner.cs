@@ -99,8 +99,7 @@ namespace Dunward.Capricorn
             {
                 yield return RunCoroutine(currentNode.coroutineData);
 
-                var action = CreateAction(currentNode.actionData);
-                yield return RunAction(action);
+                yield return RunAction(currentNode.actionData.action);
 
                 if (currentNode.nodeType == NodeType.Output) yield break;
                 currentNode = Next();
@@ -168,21 +167,21 @@ namespace Dunward.Capricorn
             }
         }
 
-        private IEnumerator RunAction(ActionPlayer action)
+        private IEnumerator RunAction(ActionUnit action)
         {
             nextNodeIndex = action.GetNextNodeIndex();
             switch (action)
             {
-                case TextDisplayer textDisplayer:
-                    bindingInteraction.AddListener(textDisplayer.Interaction);
-                    yield return textDisplayer.Execute(dialogue.NameTarget, dialogue.SubNameTarget, dialogue.ScriptTarget);
-                    bindingInteraction.RemoveListener(textDisplayer.Interaction);
+                case TextTypingUnit typing:
+                    bindingInteraction.AddListener(typing.Interaction);
+                    yield return typing.Execute(dialogue.NameTarget, dialogue.SubNameTarget, dialogue.ScriptTarget);
+                    bindingInteraction.RemoveListener(typing.Interaction);
                     
                     break;
-                case SelectionDisplayer selectionDisplayer:
-                    var selections = onSelectionCreate.Invoke(selectionDisplayer.GetSelections());
-                    yield return selectionDisplayer.Execute(selections, selectionDestroyAfterDelay);
-                    nextNodeIndex = selectionDisplayer.GetNextNodeIndex();
+                case SelectionUnit selection:
+                    var selections = onSelectionCreate.Invoke(selection.scripts);
+                    yield return selection.Execute(selections, selectionDestroyAfterDelay);
+                    nextNodeIndex = selection.GetNextNodeIndex();
                     break;
             }
 
@@ -191,19 +190,6 @@ namespace Dunward.Capricorn
         private NodeMainData Next()
         {
             return nodes[nextNodeIndex];
-        }
-        
-        private ActionPlayer CreateAction(NodeActionData actionData)
-        {
-            switch (actionData.actionNodeType)
-            {
-                case ActionType.CHARACTER:
-                    return new TextDisplayer(actionData);
-                case ActionType.USER:
-                    return new SelectionDisplayer(actionData);
-                default:
-                    return new ActionPlayer(actionData);
-            }
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Dunward.Capricorn
         private void UpdateSubContainers(NodeMainData mainData)
         {
             main.coroutine.DeserializeCoroutines(mainData.coroutineData);
-            main.action.DeserializeConnections(mainData.actionData);
+            main.action.DeserializeActions(mainData.actionData);
         }
     }
 }
