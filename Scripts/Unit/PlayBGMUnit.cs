@@ -28,7 +28,7 @@ namespace Dunward.Capricorn
         private void ShowDropDown(Rect rect)
         {
             UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-            var bgmNames = Resources.Load<AudioDatabase>("AudioDatabase").bgms.Select(bgm => bgm.name).ToList();
+            var bgmNames = Resources.Load<AudioDatabase>("AudioDatabase").bgms.Keys;
 
             foreach (var name in bgmNames.OrderBy(bgm => bgm))
             {
@@ -61,7 +61,7 @@ namespace Dunward.Capricorn
 
             go.name = bgm;
 
-            var target = info.bgms.FirstOrDefault(bgm => bgm.name == this.bgm);
+            var target = info.bgms[bgm];
 
             audio.clip = target.clip;
             audio.Play();

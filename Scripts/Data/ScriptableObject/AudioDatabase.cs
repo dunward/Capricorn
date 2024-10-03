@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using AYellowpaper.SerializedCollections;
 
 namespace Dunward.Capricorn
 {
@@ -8,14 +11,13 @@ namespace Dunward.Capricorn
     {
         public GameObject bgmPrefab;
         public GameObject sfxPrefab;
-        public List<AudioTest> bgms = new List<AudioTest>();
-        public List<AudioTest> sfxs = new List<AudioTest>();
+        public SerializedDictionary<string, AudioData> bgms = new SerializedDictionary<string, AudioData>();
+        public List<AudioData> sfxs = new List<AudioData>();
     }
 
     [System.Serializable]
-    public class AudioTest
+    public class AudioData
     {
-        public string name;
         public AudioClip clip;
         [Range(0, 1)]
         public float maxVolume = 1;

@@ -29,7 +29,7 @@ namespace Dunward.Capricorn
         private void ShowCharacterPopup(Rect rect)
         {
             UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Select(c => c.name).ToList();
+            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Keys;
 
             foreach (var c in characters.OrderBy(c => c))
             {

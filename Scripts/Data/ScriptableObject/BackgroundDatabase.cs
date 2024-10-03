@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
+
+using AYellowpaper.SerializedCollections;
 
 namespace Dunward.Capricorn
 {
@@ -7,7 +8,7 @@ namespace Dunward.Capricorn
     public class BackgroundDatabase : ScriptableObject
     {
         public GameObject backgroundPrefab;
-        public List<BackgroundTest> backgrounds = new List<BackgroundTest>();
+        public SerializedDictionary<string, Sprite> backgrounds = new SerializedDictionary<string, Sprite>();
     }
 
     [System.Serializable]

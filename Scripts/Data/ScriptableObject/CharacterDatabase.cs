@@ -1,18 +1,12 @@
-using System.Collections.Generic;
 using UnityEngine;
+
+using AYellowpaper.SerializedCollections;
 
 namespace Dunward.Capricorn
 {
     [CreateAssetMenu(fileName = "CharacterDatabase", menuName = "Capricorn/Character Database")]
     public class CharacterDatabase : ScriptableObject
     {
-        public List<CharacterTest> characters = new List<CharacterTest>();
-    }
-
-    [System.Serializable]
-    public class CharacterTest
-    {
-        public string name;
-        public GameObject prefab;
+        public SerializedDictionary<string, GameObject> characters = new SerializedDictionary<string, GameObject>();
     }
 }

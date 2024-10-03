@@ -42,7 +42,7 @@ namespace Dunward.Capricorn
         private void ShowCharacterPopup(Rect rect)
         {
             UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Select(c => c.name).ToList();
+            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Keys;
 
             foreach (var c in characters.OrderBy(c => c))
             {
@@ -65,8 +65,8 @@ namespace Dunward.Capricorn
 
         public override IEnumerator Execute(params object[] args)
         {
-            var chars = Resources.Load<CharacterDatabase>("CharacterDatabase").characters;
-            var prefab = chars.Find(c => c.name == character).prefab;
+            var characters = Resources.Load<CharacterDatabase>("CharacterDatabase").characters;
+            var prefab = characters[character];
             var parent = args[0] as Transform;
 
             var go = Object.Instantiate(prefab, parent);

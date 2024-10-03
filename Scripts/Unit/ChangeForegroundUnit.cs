@@ -28,7 +28,7 @@ namespace Dunward.Capricorn
         private void ShowBackgroundPopup(Rect rect)
         {
             UnityEditor.GenericMenu menu = new UnityEditor.GenericMenu();
-            var characters = Resources.Load<BackgroundDatabase>("BackgroundDatabase").backgrounds.Select(c => c.name).ToList();
+            var characters = Resources.Load<BackgroundDatabase>("BackgroundDatabase").backgrounds.Keys;
 
             foreach (var name in characters.OrderBy(c => c))
             {
@@ -52,7 +52,7 @@ namespace Dunward.Capricorn
         public override IEnumerator Execute(params object[] args)
         {
             var database = Resources.Load<BackgroundDatabase>("BackgroundDatabase");
-            var background = database.backgrounds.FirstOrDefault(c => c.name == backgroundImage);
+            var background = database.backgrounds[backgroundImage];
             var prefab = database.backgroundPrefab;
 
             var parent = args[0] as Transform;
@@ -66,11 +66,11 @@ namespace Dunward.Capricorn
 
             if (image != null)
             {
-                image.sprite = background.sprite;
+                image.sprite = background;
             }
             else if (sprite != null)
             {
-                sprite.sprite = background.sprite;
+                sprite.sprite = background;
             }
 
             while (fade && time < elapsedTime)
