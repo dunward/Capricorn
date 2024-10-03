@@ -54,7 +54,10 @@ namespace Dunward.Capricorn
                 Load(filePath);
             }
 
-            UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => Save();
+            UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => 
+            {
+                if (nodes.Count() > 1) Save();
+            };
             EditorApplication.playModeStateChanged += (state) =>
             {
                 if (state == PlayModeStateChange.ExitingEditMode)
