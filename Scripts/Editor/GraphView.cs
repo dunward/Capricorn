@@ -270,7 +270,7 @@ namespace Dunward.Capricorn
             foreach (var node in nodes)
             {
                 var baseNode = node as BaseNode;
-                for (int i = 0; i < baseNode.main.action.data.action.connections.Count; i++)
+                for (int i = 0; i < baseNode.main.action.data.action.connections?.Count; i++)
                 {
                     var connection = baseNode.main.action.data.action.connections[i];
                     var outputPort = baseNode.outputContainer[i] as Port;
