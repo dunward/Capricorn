@@ -13,6 +13,10 @@ namespace Dunward.Capricorn
     [RequireComponent(typeof(CapricornCache))]
     public partial class CapricornRunner : MonoBehaviour
     {
+#region Unity Inspector Fields
+        public bool isDebug;
+#endregion
+
         private CapricornDialogue dialogue;
         private CapricornSettings settings;
         private CapricornCache cache;
@@ -36,6 +40,11 @@ namespace Dunward.Capricorn
         public NodeMainData StartNode
         {
             get => graphData.nodes.Find(node => node.nodeType == NodeType.Input);
+        }
+
+        public NodeMainData DebugNode
+        {
+            get => graphData.nodes.Find(node => node.id == graphData.debugNodeIndex);
         }
 
         private void Initialize()
@@ -84,7 +93,7 @@ namespace Dunward.Capricorn
 
         public IEnumerator Run()
         {
-            var currentNode = StartNode;
+            var currentNode = isDebug ? DebugNode : StartNode;
 
             while (true)
             {
