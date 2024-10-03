@@ -169,6 +169,7 @@ namespace Dunward.Capricorn
             var data = new GraphData();
             data.position = viewTransform.position;
             data.zoomFactor = viewTransform.scale.x;
+            data.debugNodeIndex = debugStartNode?.ID ?? -1;
 
             foreach (var node in nodes)
             {
@@ -226,6 +227,16 @@ namespace Dunward.Capricorn
 
             ConnectDeserializeNodes();
             lastNodeID = data.nodes.Max(n => n.id);
+
+            var debugNode = nodes.FirstOrDefault(n => n is ConnectorNode && ((BaseNode)n).ID == data.debugNodeIndex) as ConnectorNode;
+            if (debugNode != null)
+            {
+                debugStartNode = debugNode;
+                debugNode.Q(className: "capricorn-debug-start-node")?.RemoveFromHierarchy();
+                var label = new Label("Debug");
+                label.AddToClassList("capricorn-debug-start-node");
+                debugNode.Add(label);
+            }
         }
      
         public void Save()

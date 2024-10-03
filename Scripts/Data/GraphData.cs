@@ -7,6 +7,7 @@ namespace Dunward.Capricorn
     {
         public CapricornVector2 position;
         public float zoomFactor;
+        public int debugNodeIndex;
         public List<NodeMainData> nodes = new List<NodeMainData>();
     }
 }
