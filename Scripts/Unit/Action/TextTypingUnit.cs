@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Dunward.Capricorn
 {
@@ -18,10 +19,15 @@ namespace Dunward.Capricorn
 #if UNITY_EDITOR
         public override void OnGUI()
         {
+            GUIStyle style = new GUIStyle(EditorStyles.textArea)
+            {
+                wordWrap = true
+            };
+
             name = EditorGUILayout.TextField("Name", name);
             subName = EditorGUILayout.TextField("Sub Name", subName);
             EditorGUILayout.LabelField("Script");
-            script = EditorGUILayout.TextArea(script, GUILayout.MaxHeight(50));
+            script = EditorGUILayout.TextArea(script, style, GUILayout.MaxHeight(50));
         }
 #endif
 
