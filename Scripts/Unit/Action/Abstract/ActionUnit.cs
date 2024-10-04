@@ -17,11 +17,11 @@ namespace Dunward.Capricorn
                 OnSelectionCountChanged?.Invoke();
             }
         }
+        public event System.Action OnSelectionCountChanged;
 
         public List<int> connections;
 
 #if UNITY_EDITOR
-        public event System.Action OnSelectionCountChanged;
         public abstract void OnGUI();
 
         public virtual void InitializeOnCreate()
