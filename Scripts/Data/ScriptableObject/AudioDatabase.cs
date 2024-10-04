@@ -12,7 +12,7 @@ namespace Dunward.Capricorn
         public GameObject bgmPrefab;
         public GameObject sfxPrefab;
         public SerializedDictionary<string, AudioData> bgms = new SerializedDictionary<string, AudioData>();
-        public List<AudioData> sfxs = new List<AudioData>();
+        public SerializedDictionary<string, AudioData> sfxs = new SerializedDictionary<string, AudioData>();
     }
 
     [System.Serializable]
