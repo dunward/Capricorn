@@ -1,14 +1,12 @@
 #if UNITY_EDITOR
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-
-using Newtonsoft.Json;
 
 namespace Dunward.Capricorn
 {
@@ -21,7 +19,6 @@ namespace Dunward.Capricorn
         public NodeActionContainer(NodeMainContainer main)
         {
             this.main = main;
-            data.onUpdateSelectionCount += UpdateOutputPort;
 
             main.actionContainer.Add(new IMGUIContainer(OnGUI));
 
@@ -35,7 +32,9 @@ namespace Dunward.Capricorn
 
         public void SerializeConnections()
         {
-            data.connections = new List<int>();
+            data.action.connections = Enumerable.Range(0, main.outputContainer.childCount)
+                                .Select(_ => -999)
+                                .ToList();
 
             for (int i = 0; i < main.outputContainer.childCount; i++)
             {
@@ -45,100 +44,68 @@ namespace Dunward.Capricorn
                 {
                     var inputPort = connection.input;
                     var node = inputPort.node as BaseNode;
-                    data.connections.Add(node.ID);
+                    data.action.connections[i] = node.ID;
                 }
             }
         }
 
-        public void DeserializeConnections(NodeActionData data)
+        public void DeserializeActions(NodeActionData data)
         {
             this.data = data;
-            data.onUpdateSelectionCount += UpdateOutputPort;
+            this.data.action.OnSelectionCountChanged += UpdateOutputPort;
+
             UpdateOutputPort();
         }
 
         private void OnGUI()
         {
-            EditorGUILayout.BeginHorizontal();
-            data.actionNodeType = (ActionType)EditorGUILayout.EnumPopup(data.actionNodeType);
+            var assembly = Assembly.GetAssembly(typeof(ActionUnit));
+            var types = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(ActionUnit)))
+                .ToList();
 
-            if (data.actionNodeType == ActionType.USER)
+            if (EditorGUILayout.DropdownButton(new GUIContent(data.action?.GetType().Name), FocusType.Passive))
             {
-                var temp = EditorGUILayout.IntField(data.SelectionCount, GUILayout.Width(20));
-                data.SelectionCount = Mathf.Clamp(temp, 1, 4);
-            }
-            else
-            {
-                data.SelectionCount = 1;
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-            if (data.actionNodeType != ActionType.NONE)
-            {
-                data.foldout = EditorGUILayout.BeginFoldoutHeaderGroup(data.foldout, "Details");
-                if (data.foldout)
+                var menu = new GenericMenu();
+                foreach (var type in types)
                 {
-                    if (data.actionNodeType == ActionType.CHARACTER)
+                    menu.AddItem(new GUIContent(type.Name), false, () =>
                     {
-                        DrawCharacterScript();
-                    }
-                    else if (data.actionNodeType == ActionType.USER)
-                    {
-                        DrawUserScript();
-                    }
+                        data.action = (ActionUnit)Activator.CreateInstance(type);
+                        data.action.InitializeOnCreate();
+                        data.action.OnSelectionCountChanged += UpdateOutputPort;
+                    });
                 }
-                EditorGUILayout.EndFoldoutHeaderGroup();
+                menu.ShowAsContext();
             }
-        }
 
-        private void DrawCharacterScript()
-        {
-            EditorGUILayout.LabelField("Name");
-            data.name = EditorGUILayout.TextField(data.name);
-            EditorGUILayout.LabelField("Sub Name");
-            data.subName = EditorGUILayout.TextField(data.subName);
-            EditorGUILayout.LabelField("Script");
-            GUIStyle textAreaStyle = new GUIStyle(EditorStyles.textArea);
-            textAreaStyle.wordWrap = true;
-            data.scripts[0] = EditorGUILayout.TextArea(data.scripts[0], textAreaStyle, GUILayout.Height(50));
-        }
-
-        private void DrawUserScript()
-        {
-            data.name = string.Empty;
-            data.subName = string.Empty;
-            for (int i = 0; i < data.SelectionCount; i++)
+            if (data.action != null)
             {
-                EditorGUILayout.LabelField($"{i}");
-                data.scripts[i] = EditorGUILayout.TextArea(data.scripts[i], GUILayout.Height(20));
+                data.action.OnGUI();
             }
         }
 
         private void UpdateOutputPort()
         {
-            if (main.outputContainer.childCount > data.SelectionCount)
+            if (main.outputContainer.childCount > data.action.SelectionCount)
             {
-                for (int i = main.outputContainer.childCount - 1; i >= data.SelectionCount; i--)
+                for (int i = main.outputContainer.childCount - 1; i >= data.action.SelectionCount; i--)
                 {
                     var port = main.outputContainer[i] as Port;
                     main.graphView.DeleteElements(port.connections);
                     main.outputContainer.RemoveAt(i);
                 }
             }
-            else if (main.outputContainer.childCount < data.SelectionCount)
+            else if (main.outputContainer.childCount < data.action.SelectionCount)
             {
-                for (int i = main.outputContainer.childCount; i < data.SelectionCount; i++)
+                for (int i = main.outputContainer.childCount; i < data.action.SelectionCount; i++)
                 {
                     var outputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
                     outputPort.portName = $"{i}";
                     outputPort.portColor = CapricornColors.Port;
                     main.outputContainer.Add(outputPort);
-                    data.scripts.Add(string.Empty);
                 }
             }
-
-            data.scripts = data.scripts.Take(data.SelectionCount).ToList();
         }
     }
 }

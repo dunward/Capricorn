@@ -270,13 +270,15 @@ namespace Dunward.Capricorn
             foreach (var node in nodes)
             {
                 var baseNode = node as BaseNode;
-                for (int i = 0; i < baseNode.main.action.data.connections.Count; i++)
+                for (int i = 0; i < baseNode.main.action.data.action.connections?.Count; i++)
                 {
-                    var connection = baseNode.main.action.data.connections[i];
+                    var connection = baseNode.main.action.data.action.connections[i];
                     var outputPort = baseNode.outputContainer[i] as Port;
                     var inputPort = nodes.Where(n => n is BaseNode)
                                         .Cast<BaseNode>()
-                                        .First(n => n.ID == connection).inputContainer[0] as Port;
+                                        .FirstOrDefault(n => n.ID == connection)?.inputContainer[0] as Port;
+
+                    if (inputPort == null) continue;
 
                     var edge = outputPort.ConnectTo(inputPort);
                     AddElement(edge);
