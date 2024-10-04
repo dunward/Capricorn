@@ -12,9 +12,6 @@ namespace Dunward.Capricorn
     {
         public List<string> scripts = new List<string>();
 
-        private bool skip = false;
-        private bool isFinish = false;
-
 #if UNITY_EDITOR
         public override void OnGUI()
         {
@@ -53,7 +50,7 @@ namespace Dunward.Capricorn
         {
             var buttons = args[0] as List<Button>;
             var selectionDestroyAfterDelay = (float)args[1];
-            
+
             for (int i = 0; i < buttons.Count; i++)
             {
                 int index = i;
