@@ -78,7 +78,6 @@ namespace Dunward.Capricorn
                         case ConnectorNode:
                         case OutputNode:
                             var temp = ((BaseNode)element).GetMainData();
-                            temp.id = ++lastNodeID;
                             temp.x += 100;
                             temp.y += 100;
                             datas.Add(temp);
@@ -95,6 +94,8 @@ namespace Dunward.Capricorn
 
                 foreach (var nodeData in datas)
                 {
+                    nodeData.id = ++lastNodeID;
+                    
                     switch (nodeData.nodeType)
                     {
                         case NodeType.Connector:
@@ -107,8 +108,6 @@ namespace Dunward.Capricorn
                             break;
                     }
                 }
-
-                lastNodeID = datas.Max(n => n.id);
             };
 
             this.AddManipulator(new ContentZoomer());
