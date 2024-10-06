@@ -255,12 +255,13 @@ namespace Dunward.Capricorn
 
         public void SaveAs()
         {
-            var path = EditorUtility.SaveFilePanel("Save Graph", "", "graph", "json");
+            // editor directiory
+            var path = EditorUtility.SaveFilePanel("Save Graph", Application.dataPath, null, "json");
             if (string.IsNullOrEmpty(path)) return;
 
+            filePath = path;
             UpdateTitleLabel();
             onChangeFilePath?.Invoke(path);
-            filePath = path;
             Save();
         }
 
