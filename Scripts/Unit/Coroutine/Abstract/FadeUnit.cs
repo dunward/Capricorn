@@ -7,6 +7,8 @@ namespace Dunward.Capricorn
     {
         public bool fade;
         public float elapsedTime;
+        public AnimationCurve lerpCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
 #if UNITY_EDITOR
         protected override string info => "Coroutine Element";
 
@@ -20,12 +22,15 @@ namespace Dunward.Capricorn
                 elapsedTime = Mathf.Clamp(UnityEditor.EditorGUI.FloatField(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Elapsed Time", elapsedTime),
                     0, float.MaxValue);
                 height += UnityEditor.EditorGUIUtility.singleLineHeight;
+
+                lerpCurve = UnityEditor.EditorGUI.CurveField(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Lerp Curve", lerpCurve);
+                height += UnityEditor.EditorGUIUtility.singleLineHeight;
             }
         }
 
         public override float GetHeight()
         {
-            return fade ? UnityEditor.EditorGUIUtility.singleLineHeight * 4 : UnityEditor.EditorGUIUtility.singleLineHeight * 3;
+            return fade ? UnityEditor.EditorGUIUtility.singleLineHeight * 5 : UnityEditor.EditorGUIUtility.singleLineHeight * 3;
         }
 #endif
     }

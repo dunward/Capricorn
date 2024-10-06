@@ -110,7 +110,7 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
-                var targetColor = Color.Lerp(Color.black, Color.white, time / elapsedTime);
+                var targetColor = Color.Lerp(Color.black, Color.white, lerpCurve.Evaluate(time / elapsedTime));
                 time += Time.deltaTime;
 
                 if (image != null)

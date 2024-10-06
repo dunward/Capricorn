@@ -43,7 +43,7 @@ namespace Dunward.Capricorn
 
                 foreach (var pair in map)
                 {
-                    var targetColor = Color.Lerp(targetColors[pair.Value], Color.black, time / elapsedTime);
+                    var targetColor = Color.Lerp(targetColors[pair.Value], Color.black, lerpCurve.Evaluate(time / elapsedTime));
                     var image = pair.Value.GetComponent<SpriteRenderer>();
                     var sprite = pair.Value.GetComponent<UnityEngine.UI.Image>();
 

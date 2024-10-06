@@ -81,7 +81,7 @@ namespace Dunward.Capricorn
                 go.transform.position = position;
                 go.transform.localScale = new Vector3(scale, scale, 1);
             }
-            
+
             var time = 0f;
             var image = go.GetComponent<UnityEngine.UI.Image>();
             var sprite = go.GetComponent<SpriteRenderer>();
@@ -97,7 +97,7 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
-                var targetColor = new Color(1, 1, 1, time / elapsedTime);
+                var targetColor = new Color(1, 1, 1, lerpCurve.Evaluate(time / elapsedTime));
                 time += Time.deltaTime;
 
                 if (image != null)

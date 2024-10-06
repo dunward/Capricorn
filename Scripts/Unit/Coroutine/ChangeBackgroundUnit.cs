@@ -97,7 +97,7 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
-                var targetColor = new Color(1, 1, 1, time / elapsedTime);
+                var targetColor = new Color(1, 1, 1, lerpCurve.Evaluate(time / elapsedTime));
                 time += Time.deltaTime;
 
                 if (image != null)

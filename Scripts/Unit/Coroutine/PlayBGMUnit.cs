@@ -70,7 +70,7 @@ namespace Dunward.Capricorn
 
             while (fade && time < elapsedTime)
             {
-                var targetVolume = Mathf.Lerp(0, target.maxVolume, time / elapsedTime);
+                var targetVolume = Mathf.Lerp(0, target.maxVolume, lerpCurve.Evaluate(time / elapsedTime));
                 time += Time.deltaTime;
 
                 audio.volume = targetVolume;
