@@ -63,7 +63,7 @@ namespace Dunward.Capricorn
             {
                 if (state == PlayModeStateChange.ExitingEditMode)
                 {
-                    Save();
+                    if (nodes.Count() > 1) Save();
                 }
             };
             
@@ -95,7 +95,7 @@ namespace Dunward.Capricorn
                 foreach (var nodeData in datas)
                 {
                     nodeData.id = ++lastNodeID;
-                    
+
                     switch (nodeData.nodeType)
                     {
                         case NodeType.Connector:
