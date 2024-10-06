@@ -57,13 +57,13 @@ namespace Dunward.Capricorn
 
             UnityEditor.Compilation.CompilationPipeline.compilationStarted += (_) => 
             {
-                if (nodes.Count() > 1) Save();
+                if (nodes.Count() > 1 || !string.IsNullOrEmpty(filePath)) Save();
             };
             EditorApplication.playModeStateChanged += (state) =>
             {
                 if (state == PlayModeStateChange.ExitingEditMode)
                 {
-                    if (nodes.Count() > 1) Save();
+                    if (nodes.Count() > 1 || !string.IsNullOrEmpty(filePath)) Save();
                 }
             };
             
