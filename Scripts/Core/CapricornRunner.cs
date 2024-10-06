@@ -158,6 +158,9 @@ namespace Dunward.Capricorn
                 case PlaySFXUnit playSFXUnit:
                     yield return playSFXUnit.Execute();
                     break;
+                case TransformCharacterUnit transformCharacterUnit:
+                    yield return transformCharacterUnit.Execute(characters);
+                    break;
                 default:
                     if (AddCustomCoroutines != null)
                     {
