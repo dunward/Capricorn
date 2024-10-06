@@ -8,6 +8,8 @@ namespace Dunward.Capricorn
     public class ChangeBackgroundUnit : FadeUnit
     {
         public string backgroundImage;
+        public CapricornVector2 position;
+        public float scale = 1;
 
 #if UNITY_EDITOR
         protected override string info => "Change Background";
@@ -21,6 +23,14 @@ namespace Dunward.Capricorn
             {
                 ShowBackgroundPopup(dropDownRect);
             }
+
+            height += UnityEditor.EditorGUIUtility.singleLineHeight;
+
+            position = UnityEditor.EditorGUI.Vector2Field(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Position", position);
+
+            height += UnityEditor.EditorGUIUtility.singleLineHeight * 2;
+
+            scale = Mathf.Clamp(UnityEditor.EditorGUI.FloatField(new Rect(rect.x, rect.y + height, rect.width, UnityEditor.EditorGUIUtility.singleLineHeight), "Scale", scale), 0f, float.MaxValue);
 
             height += UnityEditor.EditorGUIUtility.singleLineHeight;
         }
@@ -45,7 +55,7 @@ namespace Dunward.Capricorn
 
         public override float GetHeight()
         {
-            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight;
+            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight * 4;
         }
 #endif
 
@@ -59,6 +69,18 @@ namespace Dunward.Capricorn
             
             var go = Object.Instantiate(prefab, parent);
             go.name = backgroundImage;
+
+            if (go.transform is RectTransform)
+            {
+                var rt = go.transform as RectTransform;
+                rt.anchoredPosition = position;
+                rt.localScale = new Vector3(scale, scale, 1);
+            }
+            else
+            {
+                go.transform.position = position;
+                go.transform.localScale = new Vector3(scale, scale, 1);
+            }
 
             var time = 0f;
             var image = go.GetComponent<UnityEngine.UI.Image>();

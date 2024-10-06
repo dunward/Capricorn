@@ -10,9 +10,7 @@ namespace Dunward.Capricorn
     public class ShowCharacterUnit : FadeUnit
     {
         public string character;
-
         public CapricornVector2 position;
-
         public float scale = 1;
 
 #if UNITY_EDITOR
@@ -93,7 +91,6 @@ namespace Dunward.Capricorn
             }
 
             map[character] = go;
-
 
             if (go.transform is RectTransform)
             {
