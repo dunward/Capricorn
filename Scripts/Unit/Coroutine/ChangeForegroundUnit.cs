@@ -55,7 +55,7 @@ namespace Dunward.Capricorn
 
         public override float GetHeight()
         {
-            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight;
+            return base.GetHeight() + UnityEditor.EditorGUIUtility.singleLineHeight * 4;
         }
 #endif
 
