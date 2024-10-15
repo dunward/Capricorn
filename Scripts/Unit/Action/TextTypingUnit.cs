@@ -33,6 +33,10 @@ namespace Dunward.Capricorn
 
         public override IEnumerator Execute(params object[] args)
         {
+            skip = false;
+            isFinish = false;
+            isComplete = false;
+
             args[0].SetText(name);
             args[1].SetText(subName);
             args[2].SetText(string.Empty);

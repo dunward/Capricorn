@@ -48,6 +48,8 @@ namespace Dunward.Capricorn
 
         public override IEnumerator Execute(params object[] args)
         {
+            isComplete = false;
+            
             var buttons = args[0] as List<Button>;
             var selectionDestroyAfterDelay = (float)args[1];
 
