@@ -106,6 +106,21 @@ namespace Dunward.Capricorn
             }
         }
 
+        public IEnumerator RunFromID(int id)
+        {
+            var currentNode = graphData.nodes.Find(node => node.id == id);
+
+            while (true)
+            {
+                yield return RunCoroutine(currentNode.coroutineData);
+
+                yield return RunAction(currentNode.actionData.action);
+
+                if (currentNode.nodeType == NodeType.Output) yield break;
+                currentNode = Next();
+            }
+        }
+
         private IEnumerator RunCoroutine(NodeCoroutineData data)
         {
             foreach (var coroutine in data.coroutines)
