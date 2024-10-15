@@ -166,6 +166,7 @@ namespace Dunward.Capricorn
         public string SerializeGraph()
         {
             var data = new GraphData();
+            data.version = "1.0";
             data.position = viewTransform.position;
             data.zoomFactor = viewTransform.scale.x;
             data.debugNodeIndex = debugStartNode?.ID ?? -1;
