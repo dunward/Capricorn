@@ -72,6 +72,11 @@ namespace Dunward.Capricorn
 
             var map = args[1] as Dictionary<string, GameObject>;
 
+            if (map.ContainsKey(character))
+            {
+                Object.Destroy(map[character]);
+            }
+
             foreach (var pair in map)
             {
                 if (pair.Key != character)
