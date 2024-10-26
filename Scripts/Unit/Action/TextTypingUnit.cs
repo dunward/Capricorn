@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,12 +38,15 @@ namespace Dunward.Capricorn
             skip = false;
             isFinish = false;
             isComplete = false;
-
+            
             args[0].SetText(name);
             args[1].SetText(subName);
             args[2].SetText(string.Empty);
 
-            foreach (var letter in script)
+            var totalText = string.Empty;
+            var suffix = string.Empty;
+
+            for (int i = 0; i < script.Length; i++)
             {
                 if (skip)
                 {
@@ -49,8 +54,54 @@ namespace Dunward.Capricorn
                     break;
                 }
 
-                args[2].AppendText(letter);
-                yield return new WaitForSeconds(0.05f);
+                if (script[i] == '<')
+                {
+                    var tag = string.Empty;
+                    bool isClosingTag = false;
+
+                    while (script[i] != '>')
+                    {
+                        tag += script[i];
+                        i++;
+                    }
+                    tag += '>';
+
+                    if (tag.StartsWith("</"))
+                    {
+                        isClosingTag = true;
+                    }
+                    else
+                    {
+                        var tagName = string.Empty;
+                        if (tag.Contains("="))
+                        {
+                            tagName = tag.Substring(1, tag.IndexOf('=') - 1);
+                        }
+                        else
+                        {
+                            tagName = tag.Substring(1, tag.Length - 2);
+                        }
+
+                        suffix = $"</{tagName}>{suffix}";
+                    }
+
+                    if (isClosingTag)
+                    {
+                        var closingTagName = tag.Substring(2, tag.Length - 3);
+                        if (suffix.Contains($"</{closingTagName}>"))
+                        {
+                            suffix = suffix.Replace($"</{closingTagName}>", string.Empty);
+                        }
+                    }
+
+                    totalText += tag;
+                }
+                else
+                {
+                    totalText += script[i];
+                    args[2].SetText($"{totalText}{suffix}");
+                    yield return new WaitForSeconds(0.05f);
+                }
             }
 
             isFinish = true;
