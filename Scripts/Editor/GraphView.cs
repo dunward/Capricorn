@@ -195,6 +195,8 @@ namespace Dunward.Capricorn
 
         public void Load(string path)
         {
+            if (string.IsNullOrEmpty(path)) return;
+            
             ClearGraph();
 
             filePath = path;
