@@ -24,7 +24,8 @@ namespace Dunward.Capricorn
 
         private JsonSerializerSettings settings = new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto
+            TypeNameHandling = TypeNameHandling.Auto,
+            Formatting = Formatting.Indented
         };
 
         public System.Action<string> onChangeFilePath;
