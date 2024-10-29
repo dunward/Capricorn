@@ -43,7 +43,7 @@ namespace Dunward.Capricorn
             args[1].SetText(subName);
             args[2].SetText(string.Empty);
 
-            var totalText = string.Empty;
+            var totalText = new System.Text.StringBuilder();
             var suffix = string.Empty;
 
             for (int i = 0; i < script.Length; i++)
@@ -94,12 +94,12 @@ namespace Dunward.Capricorn
                         }
                     }
 
-                    totalText += tag;
+                    totalText.Append(tag);
                 }
                 else
                 {
-                    totalText += script[i];
-                    args[2].SetText($"{totalText}{suffix}");
+                    totalText.Append(script[i]);
+                    args[2].SetText(string.Concat(totalText, suffix));
                     yield return new WaitForSeconds(0.05f);
                 }
             }
